@@ -10,6 +10,7 @@ const EditResume = () => {
         console.log(dummy);
         setResumeInfo(dummy);
     },[])
+    
   return (
     <ResumeInfoContext.Provider value={{resumeInfo,setResumeInfo}}>
     <div className='grid grid-cols-1 md:grid-cols-2 p-1 gap-10'>

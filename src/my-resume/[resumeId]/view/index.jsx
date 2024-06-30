@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import GlobalApi from "./../../../../service/GlobalApi";
 import { RWebShare } from "react-web-share";
@@ -6,10 +6,15 @@ import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import Header from "@/components/custom/Header";
 import ResumePreview from "@/dashboard/resume/components/ResumePreview";
 import { Button } from "@/components/ui/button"; // Assuming Button is a named export
+import dummy from "@/data/dummy";
 
 function ViewResume() {
   const [resumeInfo, setResumeInfo] = useState();
   const { resumeId } = useParams();
+  useEffect(()=>{
+      console.log(dummy);
+      setResumeInfo(dummy);
+  },[])
 
   // useEffect(() => {
   //   // Example: Fetch resume info on component mount
