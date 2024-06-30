@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PersonalDetail from "./forms/PersonalDetail";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, LayoutGrid } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import Summery from "./forms/Summery";
 import Experience from "./forms/Experience";
 import Education from "./forms/Education";
@@ -44,6 +44,7 @@ const FormSection = () => {
      {activeFormIndex == 3 && <Experience />} 
      {activeFormIndex == 4 && <Education />} 
      {activeFormIndex == 5 && <Skills />} 
+     {activeFormIndex == 5 && <Navigate to={'/my-resume/'+resumeId+"/view"}/>} 
 
     </div>
   );
