@@ -33,7 +33,7 @@ function ResumeCardItem({ resume, refreshData }) {
 console.log(resume,'resume');
   const onDelete = () => {
     setLoading(true);
-    GlobalApi.DeleteResumeById(resume._id).then(
+    GlobalApi.DeleteResumeById(resume?._id).then(
       (resp) => {
         console.log(resp);
         toast("Resume Deleted!");
@@ -48,7 +48,7 @@ console.log(resume,'resume');
   };
   return (
     <div className="to-blue-500">
-      <Link to={"/dashboard/resume/" + resume._id + "/edit"}>
+      <Link to={"/dashboard/resume/" + resume?._id + "/edit"}>
         <div
           className="p-14  bg-gradient-to-b
           from-pink-100 via-purple-200 to-blue-200
@@ -74,7 +74,7 @@ console.log(resume,'resume');
           background: resume?.themeColor,
         }}
       >
-        <h2 className="text-sm text-[#555]">{resume.title}</h2>
+        <h2 className="text-sm text-[#555]">{resume?.title}</h2>
 
         <DropdownMenu>
           <DropdownMenuTrigger>
@@ -83,21 +83,21 @@ console.log(resume,'resume');
           <DropdownMenuContent>
             <DropdownMenuItem
               onClick={() =>
-                navigation("/dashboard/resume/" + resume._id + "/edit")
+                navigation("/dashboard/resume/" + resume?._id + "/edit")
               }
             >
               Edit
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() =>
-                navigation("/my-resume/" + resume._id + "/view")
+                navigation("/my-resume/" + resume?._id + "/view")
               }
             >
               View
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() =>
-                navigation("/my-resume/" + resume._id + "/view")
+                navigation("/my-resume/" + resume?._id + "/view")
               }
             >
               Download
