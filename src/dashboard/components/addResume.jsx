@@ -23,20 +23,18 @@ const AddResume = () => {
     setLoading(true);
     const uuid = new Date().getTime();
     const data = {
-      data: {
-        title: resumeTitle,
-        resumeId: uuid.toString(),
-        userEmail: user?.primaryEmailAddress?.emailAddress,
-        userName: user?.fullName,
-      },
+      title: resumeTitle,
+      resumeId: uuid.toString(),
+      userEmail: user?.primaryEmailAddress?.emailAddress,
+      userName: user?.fullName,
     };
     GlobalApi.CreateNewResume(data).then(
       (resp) => {
-        console.log(resp.data.data.documentId);
+        console.log(resp.data);
         if (resp) {
           setLoading(false);
           navigation(
-            "/dashboard/resume/" + resp.data.data.documentId + "/edit"
+            "/dashboard/resume/" + resp.data.resumeId + "/edit"
           );
         }
       },
