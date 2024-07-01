@@ -3,6 +3,7 @@ import AddResume from "./components/addResume";
 import ResumeCardItem from "./components/ResumeCardItem";
 import { useUser } from "@clerk/clerk-react";
 import GlobalApi from "../../service/GlobalApi";
+import dummy from "@/data/dummy";
 
 const Dashboard = () => {
   const { user } = useUser();
@@ -17,8 +18,8 @@ const Dashboard = () => {
   const GetResumesList = () => {
     GlobalApi.GetUserResumes(user?.primaryEmailAddress?.emailAddress).then(
       (resp) => {
-        console.log(resp.data);
-        setResumeList(resp.data);
+        console.log(resp?.data);
+        setResumeList(resp.data ?? dummy);
       }
     );
   };
