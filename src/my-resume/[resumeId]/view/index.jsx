@@ -5,28 +5,38 @@ import { RWebShare } from "react-web-share";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import Header from "@/components/custom/Header";
 import ResumePreview from "@/dashboard/resume/components/ResumePreview";
-import { Button } from "@/components/ui/button"; // Assuming Button is a named export
-import dummy from "@/data/dummy";
+import { Button } from "@/components/ui/button";
+import { useUser } from "@clerk/clerk-react";
+// import dummy from "@/data/dummy";
 
 function ViewResume() {
   const [resumeInfo, setResumeInfo] = useState();
+  const { user } = useUser();
+  console.log(resumeInfo, "mahendra");
+
   const { resumeId } = useParams();
-  useEffect(()=>{
-      console.log(dummy);
-      setResumeInfo(dummy);
-  },[])
+  // useEffect(()=>{
+  //     console.log(dummy);
+  //     setResumeInfo(dummy);
+  // },[])
 
-  // useEffect(() => {
-  //   // Example: Fetch resume info on component mount
-  //   GetResumeInfo();
-  // }, []);
+  useEffect(() => {
+    user && GetResumesList();
+  }, [user]);
 
-  // const GetResumeInfo = () => {
-  //   GlobalApi.GetResumeById(resumeId).then((resp) => {
-  //     console.log(resp.data.data);
-  //     setResumeInfo(resp.data.data);
-  //   });
-  // };
+  /**
+   * Used to Get Users Resume List
+   */
+  const GetResumesList = () => {
+    GlobalApi.GetUserResumes(user?.primaryEmailAddress?.emailAddress).then(
+      (resp) => {
+        console.log(resp?.data);
+        setResumeInfo(
+          resp.data?.find((item) => item?._id == resumeId) ?? dummy
+        );
+      }
+    );
+  };
 
   const HandleDownload = () => {
     window.print();
@@ -51,7 +61,9 @@ function ViewResume() {
             <RWebShare
               data={{
                 text: "Hello Everyone, This is my resume. Please open the URL to view it.",
-                url: `${import.meta.env.VITE_BASE_URL}/my-resume/${resumeId}/view`,
+                url: `${
+                  import.meta.env.VITE_BASE_URL
+                }/my-resume/${resumeId}/view`,
                 title: `${resumeInfo?.firstName} ${resumeInfo?.lastName} resume`,
               }}
               onClick={() => console.log("shared successfully!")}
