@@ -12,18 +12,18 @@ const prompt =
   "Job Title: {jobTitle} , Depends on job title give me list of  summery for 3 experience level, Mid Level and Freasher level in 3 -4 lines in array format, With summery and experience_level Field in JSON Format";
 function Summery({ enabledNext }) {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
-  const [summery, setSummery] = useState();
+  const [summary, setSummery] = useState("");
   const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const params = useParams();
   const [aiGeneratedSummeryList, setAiGenerateSummeryList] = useState();
   useEffect(() => {
-    summery &&
+    summary &&
       setResumeInfo({
         ...resumeInfo,
-        summery: summery,
+        summary: summary,
       });
-  }, [summery]);
+  }, [summary]);
 
   const GenerateSummeryFromAI = async () => {
     setLoading(true);
@@ -41,9 +41,7 @@ function Summery({ enabledNext }) {
 
     setLoading2(true);
     const data = {
-      data: {
-        summery: summery,
-      },
+      summary: summary,
     };
     GlobalApi.UpdateResumeDetail(params?.resumeId, data).then(
       (resp) => {
@@ -84,8 +82,8 @@ function Summery({ enabledNext }) {
           <Textarea
             className="mt-5"
             required
-            value={summery}
-            defaultValue={summery ? summery : resumeInfo?.summery}
+            value={summary}
+            defaultValue={summary ? summary : resumeInfo?.summary}
             onChange={(e) => setSummery(e.target.value)}
           />
           <div className="mt-2 flex justify-end">
