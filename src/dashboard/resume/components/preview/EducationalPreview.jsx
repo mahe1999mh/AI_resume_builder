@@ -1,6 +1,7 @@
 import React from 'react'
 
 function EducationalPreview({resumeInfo}) {
+    if (!resumeInfo || !resumeInfo.education) return null;
   return (
     <div className='my-6'>
     <h2 className='text-center font-bold text-sm mb-2'

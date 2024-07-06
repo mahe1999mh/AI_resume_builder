@@ -1,6 +1,7 @@
 import React from "react";
 
 function PersonalDetailPreview({ resumeInfo }) {
+  if (!resumeInfo) return null;
   return (
     <div>
       <h2

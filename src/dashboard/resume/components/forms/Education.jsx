@@ -12,23 +12,18 @@ function Education() {
   const [loading, setLoading] = useState(false);
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
   const params = useParams();
-  const [educationalList, setEducationalList] = useState([
-    {
-      universityName: "",
-      degree: "",
-      major: "",
-      startDate: "",
-      endDate: "",
-      description: "",
-    },
-  ]);
+  const [educationalList, setEducationalList] = useState([]); // Initialize with an empty array
 
   useEffect(() => {
-    resumeInfo && setEducationalList(resumeInfo?.education);
-  }, []);
+    // Populate educationalList from resumeInfo if available
+    if (resumeInfo && resumeInfo.education) {
+      setEducationalList(resumeInfo.education);
+    }
+  }, [resumeInfo]); // Trigger on resumeInfo change
+
   const handleChange = (event, index) => {
-    const newEntries = educationalList.slice();
     const { name, value } = event.target;
+    const newEntries = [...educationalList]; // Spread to create a new array
     newEntries[index][name] = value;
     setEducationalList(newEntries);
   };
@@ -46,9 +41,11 @@ function Education() {
       },
     ]);
   };
+
   const RemoveEducation = () => {
-    setEducationalList((educationalList) => educationalList.slice(0, -1));
+    setEducationalList(educationalList.slice(0, -1));
   };
+
   const onSave = () => {
     setLoading(true);
     const data = {
@@ -74,6 +71,7 @@ function Education() {
       education: educationalList,
     });
   }, [educationalList]);
+
   return (
     <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4 mt-10">
       <h2 className="font-bold text-lg">Education</h2>
@@ -81,14 +79,14 @@ function Education() {
 
       <div>
         {educationalList.map((item, index) => (
-          <div>
+          <div key={index}>
             <div className="grid grid-cols-2 gap-3 border p-3 my-5 rounded-lg">
               <div className="col-span-2">
                 <label>University Name</label>
                 <Input
                   name="universityName"
                   onChange={(e) => handleChange(e, index)}
-                  defaultValue={item?.universityName}
+                  value={item.universityName}
                 />
               </div>
               <div>
@@ -96,7 +94,7 @@ function Education() {
                 <Input
                   name="degree"
                   onChange={(e) => handleChange(e, index)}
-                  defaultValue={item?.degree}
+                  value={item.degree}
                 />
               </div>
               <div>
@@ -104,7 +102,7 @@ function Education() {
                 <Input
                   name="major"
                   onChange={(e) => handleChange(e, index)}
-                  defaultValue={item?.major}
+                  value={item.major}
                 />
               </div>
               <div>
@@ -113,7 +111,7 @@ function Education() {
                   type="date"
                   name="startDate"
                   onChange={(e) => handleChange(e, index)}
-                  defaultValue={item?.startDate}
+                  value={item.startDate}
                 />
               </div>
               <div>
@@ -122,7 +120,7 @@ function Education() {
                   type="date"
                   name="endDate"
                   onChange={(e) => handleChange(e, index)}
-                  defaultValue={item?.endDate}
+                  value={item.endDate}
                 />
               </div>
               <div className="col-span-2">
@@ -130,7 +128,7 @@ function Education() {
                 <Textarea
                   name="description"
                   onChange={(e) => handleChange(e, index)}
-                  defaultValue={item?.description}
+                  value={item.description}
                 />
               </div>
             </div>
@@ -144,7 +142,6 @@ function Education() {
             onClick={AddNewEducation}
             className="text-primary"
           >
-            {" "}
             + Add More Education
           </Button>
           <Button
@@ -152,11 +149,10 @@ function Education() {
             onClick={RemoveEducation}
             className="text-primary"
           >
-            {" "}
             - Remove
           </Button>
         </div>
-        <Button disabled={loading} onClick={() => onSave()}>
+        <Button disabled={loading} onClick={onSave}>
           {loading ? <LoaderCircle className="animate-spin" /> : "Save"}
         </Button>
       </div>

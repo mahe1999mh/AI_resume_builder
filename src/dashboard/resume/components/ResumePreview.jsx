@@ -8,11 +8,14 @@ import SkillsPreview from "./preview/SkillsPreview";
 
 const ResumePreview = () => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
+  if (!resumeInfo) return;
   return (
-    <div className='shadow-lg h-full p-14 border-t-[20px]'
-    style={{
-        borderColor:resumeInfo?.themeColor
-    }}>
+    <div
+      className="shadow-lg h-full p-14 border-t-[20px]"
+      style={{
+        borderColor: resumeInfo?.themeColor,
+      }}
+    >
       {/* PersonalDetailPreview */}
       <PersonalDetailPreview resumeInfo={resumeInfo} />
       {/* Summery  */}
