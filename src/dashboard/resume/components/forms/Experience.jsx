@@ -74,7 +74,7 @@ function Experience() {
   const onSave = () => {
     setLoading(true);
     const data = {
-      Experience: experinceList.map(({ id, ...rest }) => rest),
+      experience: experinceList.map(({ id, ...rest }) => rest),
     };
 
     console.log(experinceList);

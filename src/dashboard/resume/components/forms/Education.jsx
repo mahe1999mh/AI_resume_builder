@@ -37,26 +37,23 @@ function Education() {
   const AddNewEducation=()=>{
     setEducationalList([...educationalList,
       {
-        universityName:'',
-        degree:'',
-        major:'',
-        startDate:'',
-        endDate:'',
-        description:''
-      }
-    ])
-  }
-  const RemoveEducation=()=>{
-    setEducationalList(educationalList=>educationalList.slice(0,-1))
-
-  }
-  const onSave=()=>{
-    setLoading(true)
-    const data={
-      data:{
-        education:educationalList.map(({ id, ...rest }) => rest)
-      }
-    }
+        universityName: "",
+        degree: "",
+        major: "",
+        startDate: "",
+        endDate: "",
+        description: "",
+      },
+    ]);
+  };
+  const RemoveEducation = () => {
+    setEducationalList((educationalList) => educationalList.slice(0, -1));
+  };
+  const onSave = () => {
+    setLoading(true);
+    const data = {
+      education: educationalList.map(({ id, ...rest }) => rest),
+    };
 
     GlobalApi.UpdateResumeDetail(params.resumeId,data).then(resp=>{
       console.log(resp);
@@ -138,7 +135,7 @@ function Education() {
             </Button>
         </div>
     </div>
-  )
+  );
 }
 
-export default Education
+export default Education;
