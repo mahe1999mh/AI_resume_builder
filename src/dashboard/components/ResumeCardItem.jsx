@@ -1,12 +1,10 @@
-import { Loader2Icon, MoreVertical, Notebook } from "lucide-react";
+import { Loader2Icon, MoreVertical } from "lucide-react";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -18,116 +16,112 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import GlobalApi from "./../../../service/GlobalApi";
 import { toast } from "sonner";
 
 function ResumeCardItem({ resume, refreshData }) {
-  const navigation = useNavigate();
+  const navigate = useNavigate();
   const [openAlert, setOpenAlert] = useState(false);
   const [loading, setLoading] = useState(false);
-  // const onMenuClick=(url)=>{
-  //   navigation(url)
-  // }
-console.log(resume,'resume');
+
   const onDelete = () => {
     setLoading(true);
     GlobalApi.DeleteResumeById(resume?._id).then(
-      (resp) => {
-        console.log(resp);
+      resp => {
         toast("Resume Deleted!");
         refreshData();
         setLoading(false);
         setOpenAlert(false);
       },
-      (error) => {
+      error => {
         setLoading(false);
       }
     );
   };
+
   return (
-    <div className="to-blue-500">
+    <div className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105">
       <Link to={"/dashboard/resume/" + resume?._id + "/edit"}>
         <div
-          className="p-14  bg-gradient-to-b
-          from-pink-100 via-purple-200 to-blue-200
-        h-[280px] 
-          rounded-t-lg border-t-4
-        "
+          className="p-10 bg-gradient-to-b from-pink-100 via-purple-200 to-blue-200 h-[280px] flex justify-center items-center"
           style={{
-            borderColor: resume?.themeColor,
+            borderTop: `4px solid ${resume?.themeColor}`,
           }}
         >
-          <div
-            className="flex 
-        items-center justify-center h-[180px] "
-          >
-            {/* <Notebook/> */}
-            <img src="/cv.png" width={80} height={80} />
-          </div>
+          <img src="/cv.png" alt="Resume" className="w-20 h-20" />
         </div>
       </Link>
       <div
-        className="border p-3 flex justify-between  text-white rounded-b-lg shadow-lg"
-        style={{
-          background: resume?.themeColor,
-        }}
+        className="p-4 flex justify-between items-center rounded-b-lg"
+        style={{ backgroundColor: resume?.themeColor }}
       >
-        <h2 className="text-sm text-[#555]">{resume?.title}</h2>
-
+        <h2 className=" font-semibold ">{resume?.title}</h2>
         <DropdownMenu>
           <DropdownMenuTrigger>
-            <MoreVertical className="h-4 w-4 cursor-pointer" />
+            <MoreVertical className="cursor-pointer hover:text-gray-300 transition-colors duration-150" />
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent className="bg-white rounded-lg shadow-lg text-gray-700">
             <DropdownMenuItem
+              className="hover:bg-gray-100 px-4 py-2"
               onClick={() =>
-                navigation("/dashboard/resume/" + resume?._id + "/edit")
+                navigate("/dashboard/resume/" + resume?._id + "/edit")
               }
             >
               Edit
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() =>
-                navigation("/my-resume/" + resume?._id + "/view")
-              }
+              className="hover:bg-gray-100 px-4 py-2"
+              onClick={() => navigate("/my-resume/" + resume?._id + "/view")}
             >
               View
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() =>
-                navigation("/my-resume/" + resume?._id + "/view")
-              }
+              className="hover:bg-gray-100 px-4 py-2"
+              onClick={() => navigate("/my-resume/" + resume?._id + "/view")}
             >
               Download
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setOpenAlert(true)}>
+            <DropdownMenuItem
+              className="text-red-600 hover:bg-red-50 px-4 py-2"
+              onClick={() => setOpenAlert(true)}
+            >
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-
-        <AlertDialog open={openAlert}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete your
-                account and remove your data from our servers.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel onClick={() => setOpenAlert(false)}>
-                Cancel
-              </AlertDialogCancel>
-              <AlertDialogAction onClick={onDelete} disabled={loading}>
-                {loading ? <Loader2Icon className="animate-spin" /> : "Delete"}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
       </div>
+
+      <AlertDialog open={openAlert}>
+        <AlertDialogContent className="p-6 bg-white rounded-lg shadow-lg">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-xl font-semibold text-gray-800">
+              Are you absolutely sure?
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-sm text-gray-600 mt-2">
+              This action cannot be undone. This will permanently delete your
+              resume and remove your data from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="mt-4 flex justify-end space-x-4">
+            <AlertDialogCancel
+              className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md"
+              onClick={() => setOpenAlert(false)}
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className={`px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-all duration-150 ${
+                loading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              onClick={onDelete}
+              disabled={loading}
+            >
+              {loading ? <Loader2Icon className="animate-spin" /> : "Delete"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
