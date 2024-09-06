@@ -16,7 +16,7 @@ const FormSection = () => {
   return (
     <div className="p-1">
       <div className="flex justify-between items-center">
-        <ThemeColor/>
+        <ThemeColor />
 
         <div className="flex gap-2">
           {activeFormIndex > 1 && (
@@ -29,7 +29,7 @@ const FormSection = () => {
           )}
           <Button
             size="sm"
-            disabled={activeFormIndex >= 5}
+            disabled={activeFormIndex >= 6}
             className="flex gap-2"
             onClick={() => setActiveFormIndex(activeFormIndex + 1)}
           >
@@ -38,13 +38,14 @@ const FormSection = () => {
           </Button>
         </div>
       </div>
-     {activeFormIndex == 1 && <PersonalDetail />} 
-     {activeFormIndex == 2 && <Summery />} 
-     {activeFormIndex == 3 && <Experience />} 
-     {activeFormIndex == 4 && <Education />} 
-     {activeFormIndex == 5 && <Skills />} 
-     {activeFormIndex == 5 && <Navigate to={'/my-resume/'+resumeId+"/view"}/>} 
-
+      {activeFormIndex == 1 && <PersonalDetail />}
+      {activeFormIndex == 2 && <Summery />}
+      {activeFormIndex == 3 && <Experience />}
+      {activeFormIndex == 4 && <Education />}
+      {activeFormIndex == 5 && <Skills />}
+      {activeFormIndex == 6 && (
+        <Navigate to={"/my-resume/" + resumeId + "/view"} />
+      )}
     </div>
   );
 };

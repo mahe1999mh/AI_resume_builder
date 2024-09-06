@@ -1,4 +1,4 @@
-import { PlusSquare } from "lucide-react";
+import { LoaderCircle, PlusSquare } from "lucide-react";
 import React, { useState } from "react";
 import {
   Dialog,
@@ -29,16 +29,18 @@ const AddResume = () => {
       userName: user?.fullName,
     };
     GlobalApi.CreateNewResume(data).then(
-      (resp) => {
+      resp => {
         console.log(resp.data);
         if (resp) {
           setLoading(false);
-          navigation(
-            "/dashboard/resume/" + resp.data.resumeId + "/edit"
-          );
+          setOpenDialog(false);
+          navigation("/dashboard/resume/" + resp.data.resumeId + "/edit");
+          setTimeout(() => {
+            navigation(-1);
+          }, 10);
         }
       },
-      (error) => {
+      error => {
         setLoading(false);
       }
     );
@@ -60,7 +62,7 @@ const AddResume = () => {
               <Input
                 className="my-10"
                 placeholder="Ex. Full Stack Resume"
-                onChange={(e) => setResumeTitle(e.target.value)}
+                onChange={e => setResumeTitle(e.target.value)}
               />
             </DialogDescription>
           </DialogHeader>
@@ -68,7 +70,9 @@ const AddResume = () => {
             <Button variant="ghost" onClick={() => setOpenDialog(false)}>
               Cancel
             </Button>
-            <Button onClick={() => onCreate()}>Create</Button>
+            <Button onClick={() => onCreate()}>
+              {loading ? <LoaderCircle className="animate-spin" /> : "Create"}
+            </Button>
           </div>
         </DialogContent>
       </Dialog>

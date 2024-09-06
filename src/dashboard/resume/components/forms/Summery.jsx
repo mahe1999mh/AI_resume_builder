@@ -40,6 +40,8 @@ function Summary({ enabledNext }) {
     }
   };
 
+  console.log(loading2, "loading2");
+
   const onSave = e => {
     e.preventDefault();
     setLoading2(true);
@@ -47,13 +49,12 @@ function Summary({ enabledNext }) {
     GlobalApi.UpdateResumeDetail(params?.resumeId, data).then(
       resp => {
         console.log(resp);
-        enabledNext(true);
-        toast("Details updated");
         setLoading2(false);
+        enabledNext(true);
+        toast("Details updated", loading2);
       },
       error => {
-        toast("Failed to save summary. Please try again!");
-        setLoading2(false);
+        toast("Failed to save summary. Please try again!", error);
       }
     );
   };
