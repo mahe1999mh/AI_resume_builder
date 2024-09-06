@@ -4,7 +4,9 @@ import GlobalApi from "./../../../../service/GlobalApi";
 import { RWebShare } from "react-web-share";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import Header from "@/components/custom/Header";
-import ResumePreview from "@/dashboard/resume/components/ResumePreview";
+import ResumePreview, {
+  generatePdf,
+} from "@/dashboard/resume/components/ResumePreview";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@clerk/clerk-react";
 // import dummy from "@/data/dummy";
@@ -29,11 +31,9 @@ function ViewResume() {
    */
   const GetResumesList = () => {
     GlobalApi.GetUserResumes(user?.primaryEmailAddress?.emailAddress).then(
-      (resp) => {
+      resp => {
         console.log(resp?.data);
-        setResumeInfo(
-          resp.data?.find((item) => item?._id == resumeId) ?? dummy
-        );
+        setResumeInfo(resp.data?.find(item => item?._id == resumeId) ?? dummy);
       }
     );
   };
@@ -56,7 +56,7 @@ function ViewResume() {
             with your friends and family.
           </p>
           <div className="flex justify-between px-44 my-10">
-            <Button onClick={HandleDownload}>Download</Button>
+            <Button onClick={() => generatePdf()}>Download</Button>
 
             <RWebShare
               data={{

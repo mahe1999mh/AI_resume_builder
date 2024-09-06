@@ -7,24 +7,23 @@ import EducationalPreview from "./preview/EducationalPreview";
 import SkillsPreview from "./preview/SkillsPreview";
 import html2pdf from "html2pdf.js";
 
+export const generatePdf = () => {
+  const element = document.getElementById("content");
+
+  const options = {
+    margin: [0, 0, 0, 0],
+    filename: "resume.pdf",
+    image: { type: "jpeg", quality: 1 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+  };
+
+  html2pdf().from(element).set(options).save();
+};
+
 const ResumePreview = () => {
   const { resumeInfo } = useContext(ResumeInfoContext);
   if (!resumeInfo) return null;
-
-  const generatePdf = () => {
-    const element = document.getElementById("content");
-
-    // Configuration for A4 size
-    const options = {
-      margin: [0, 0, 0, 0],
-      filename: "resume.pdf",
-      image: { type: "jpeg", quality: 1 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-    };
-
-    html2pdf().from(element).set(options).save();
-  };
 
   return (
     <>
@@ -46,7 +45,6 @@ const ResumePreview = () => {
         {/* Skills  */}
         <SkillsPreview resumeInfo={resumeInfo} />
       </div>
-      <button onClick={generatePdf}>Generate A4 PDF</button>
     </>
   );
 };
