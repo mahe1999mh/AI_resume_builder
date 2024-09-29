@@ -8,6 +8,7 @@ import Experience from "./forms/Experience";
 import Education from "./forms/Education";
 import Skills from "./forms/Skills";
 import ThemeColor from "./ThemeColor";
+import Projects from "./forms/Project";
 
 const FormSection = () => {
   const [activeFormIndex, setActiveFormIndex] = useState(1);
@@ -29,7 +30,7 @@ const FormSection = () => {
           )}
           <Button
             size="sm"
-            disabled={activeFormIndex >= 6}
+            disabled={activeFormIndex >= 7}
             className="flex gap-2"
             onClick={() => setActiveFormIndex(activeFormIndex + 1)}
           >
@@ -40,10 +41,11 @@ const FormSection = () => {
       </div>
       {activeFormIndex == 1 && <PersonalDetail />}
       {activeFormIndex == 2 && <Summery />}
-      {activeFormIndex == 3 && <Experience />}
-      {activeFormIndex == 4 && <Education />}
-      {activeFormIndex == 5 && <Skills />}
-      {activeFormIndex == 6 && (
+      {activeFormIndex == 3 && <Projects />}
+      {activeFormIndex == 4 && <Experience />}
+      {activeFormIndex == 5 && <Education />}
+      {activeFormIndex == 6 && <Skills />}
+      {activeFormIndex == 7 && (
         <Navigate to={"/my-resume/" + resumeId + "/view"} />
       )}
     </div>
