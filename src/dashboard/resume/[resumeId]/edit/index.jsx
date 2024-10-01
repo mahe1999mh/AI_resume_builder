@@ -2,29 +2,20 @@ import React, { useEffect, useState } from "react";
 import FormSection from "../../components/FormSection";
 import ResumePreview from "../../components/ResumePreview";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import dummy from "@/data/dummy";
 import { useParams } from "react-router-dom";
-import GlobalApi from "../../../../../service/GlobalApi";
+import { useGetResumeByIdQuery } from "@/redux/resume/resumeApi";
 
 const EditResume = () => {
   const [resumeInfo, setResumeInfo] = useState();
   const { resumeId } = useParams();
-  // useEffect(()=>{
-  //     console.log(dummy);
-  //     setResumeInfo(dummy);
-  // },[])
 
-  const GetResume = () => {
-    GlobalApi.GetResumeById(resumeId).then((resp) => {
-      console.log(resp?.data);
-      setResumeInfo(resp?.data ?? dummy);
-      console.log(resp?.data, "mhr");
-    });
-  };
+  const getResumeData = useGetResumeByIdQuery(resumeId);
 
   useEffect(() => {
-    GetResume();
-  }, []);
+    if (getResumeData?.isSuccess) {
+      setResumeInfo(getResumeData?.data ?? []);
+    }
+  }, [getResumeData]);
 
   return (
     <ResumeInfoContext.Provider value={{ resumeInfo, setResumeInfo }}>

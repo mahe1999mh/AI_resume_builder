@@ -10,15 +10,19 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useUser } from "@clerk/clerk-react";
-import GlobalApi from "../../../service/GlobalApi";
 import { useNavigate } from "react-router-dom";
+import { useCreateResumeMutation } from "../../redux/resume/resumeApi";
 
 const AddResume = () => {
   const { user } = useUser();
-  const navigation = useNavigate();
+  const navigate = useNavigate(); // It's 'navigate', not 'navigation' in React Router v6
   const [openDialog, setOpenDialog] = useState(false);
-  const [resumeTitle, setResumeTitle] = useState();
+  const [resumeTitle, setResumeTitle] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Use the mutation hook
+  const [createResume] = useCreateResumeMutation();
+
   const onCreate = async () => {
     setLoading(true);
     const uuid = new Date().getTime();
@@ -28,23 +32,26 @@ const AddResume = () => {
       userEmail: user?.primaryEmailAddress?.emailAddress,
       userName: user?.fullName,
     };
-    GlobalApi.CreateNewResume(data).then(
-      resp => {
-        console.log(resp.data);
-        if (resp) {
-          setLoading(false);
-          setOpenDialog(false);
-          navigation("/dashboard/resume/" + resp.data.resumeId + "/edit");
-          setTimeout(() => {
-            navigation(-1);
-          }, 10);
-        }
-      },
-      error => {
+
+    try {
+      // Call the mutation hook instead of GlobalApi
+      const response = await createResume(data).unwrap();
+      console.log(response);
+
+      if (response) {
         setLoading(false);
+        setOpenDialog(false);
+        navigate("/dashboard/resume/" + response.resumeId + "/edit");
+        setTimeout(() => {
+          navigate(-1); // Navigate back
+        }, 10);
       }
-    );
+    } catch (error) {
+      console.error("Failed to create resume:", error);
+      setLoading(false);
+    }
   };
+
   return (
     <div>
       <div
@@ -70,7 +77,7 @@ const AddResume = () => {
             <Button variant="ghost" onClick={() => setOpenDialog(false)}>
               Cancel
             </Button>
-            <Button onClick={() => onCreate()}>
+            <Button onClick={onCreate}>
               {loading ? <LoaderCircle className="animate-spin" /> : "Create"}
             </Button>
           </div>
