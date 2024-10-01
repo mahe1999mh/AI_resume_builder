@@ -41,6 +41,22 @@ function PersonalDetailPreview({ resumeInfo }) {
         >
           {resumeInfo?.email}
         </h2>
+        <h2
+          className="font-normal text-xs"
+          style={{
+            color: resumeInfo?.themeColor,
+          }}
+        >
+          {resumeInfo?.linkedin}
+        </h2>
+        <h2
+          className="font-normal text-xs"
+          style={{
+            color: resumeInfo?.themeColor,
+          }}
+        >
+          {resumeInfo?.github}
+        </h2>
       </div>
       <hr
         className="border-[1.5px] my-2"

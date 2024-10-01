@@ -1,7 +1,7 @@
 import React from "react";
 
 function ExperiencePreview({ resumeInfo }) {
-  if (!resumeInfo || !resumeInfo.experience) return null;
+  if (!resumeInfo || resumeInfo.expirence === 'fresher') return null;
   return (
     <div className="my-6">
       <h2

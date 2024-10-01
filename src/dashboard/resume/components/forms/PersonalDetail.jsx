@@ -21,6 +21,8 @@ function PersonalDetail() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    console.log(formData);
+
 
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -87,7 +89,31 @@ function PersonalDetail() {
             />
           </div>
           <div className="col-span-2">
-            <label className="text-sm">Address</label>
+            <div className="flex gap-4 mt-2">
+              <label className="flex items-center">
+                <Input
+                  type="radio"
+                  name="expirence"
+                  value="fresher"
+                  checked={resumeInfo?.expirence === 'fresher'}
+                  onChange={handleInputChange}
+                />
+                <span className="ml-2">Fresher</span>
+              </label>
+              <label className="flex items-center">
+                <Input
+                  type="radio"
+                  name="expirence"
+                  value="expirenced"
+                  checked={resumeInfo?.expirence === 'expirenced'}
+                  onChange={handleInputChange}
+                />
+                <span className="ml-2">Expirence</span>
+              </label>
+            </div>
+          </div>
+          <div className="col-span-2">
+            <label className="text-sm">City</label>
             <Input
               name="address"
               required
@@ -110,6 +136,24 @@ function PersonalDetail() {
               name="email"
               required
               defaultValue={resumeInfo?.email}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div>
+            <label className="text-sm">LinkedIn Profile</label>
+            <Input
+              name="linkedin"
+              required
+              defaultValue={resumeInfo?.linkedin}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div>
+            <label className="text-sm">GitHub Profile</label>
+            <Input
+              name="github"
+              required
+              defaultValue={resumeInfo?.github}
               onChange={handleInputChange}
             />
           </div>
