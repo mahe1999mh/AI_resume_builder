@@ -4,9 +4,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { LoaderCircle } from "lucide-react";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import GlobalApi from "./../../../../../service/GlobalApi";
 import { useParams } from "react-router-dom";
-import { toast } from "sonner";
+import { useUpdateResumeDetailMutation } from "@/redux/resume/resumeApi";
 function Skills() {
   const [skillsList, setSkillsList] = useState([
     {
@@ -14,9 +13,11 @@ function Skills() {
       rating: 0,
     },
   ]);
-  const { resumeId } = useParams();
 
-  const [loading, setLoading] = useState(false);
+  const params = useParams();
+
+  const [post, postState] = useUpdateResumeDetailMutation();
+
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
 
   useEffect(() => {
@@ -24,10 +25,11 @@ function Skills() {
   }, []);
 
   const handleChange = (index, name, value) => {
-    const newEntries = skillsList.slice();
-
-    newEntries[index][name] = value;
-    setSkillsList(newEntries);
+    setSkillsList(prevList =>
+      prevList.map((item, i) =>
+        i === index ? { ...item, [name]: value } : item
+      )
+    );
   };
 
   const AddNewSkills = () => {
@@ -40,26 +42,14 @@ function Skills() {
     ]);
   };
   const RemoveSkills = () => {
-    setSkillsList((skillsList) => skillsList.slice(0, -1));
+    setSkillsList(skillsList => skillsList.slice(0, -1));
   };
 
   const onSave = () => {
-    setLoading(true);
     const data = {
       skills: skillsList.map(({ id, ...rest }) => rest),
     };
-
-    GlobalApi.UpdateResumeDetail(resumeId, data).then(
-      (resp) => {
-        console.log(resp);
-        setLoading(false);
-        toast("Details updated !");
-      },
-      (error) => {
-        setLoading(false);
-        toast("Server Error, Try again!");
-      }
-    );
+    post({ id: params.resumeId, data });
   };
 
   useEffect(() => {
@@ -80,8 +70,9 @@ function Skills() {
               <label className="text-xs">Name</label>
               <Input
                 className="w-full"
+                name="name"
                 defaultValue={item.name}
-                onChange={(e) => handleChange(index, "name", e.target.value)}
+                onChange={e => handleChange(index, "name", e.target.value)}
               />
             </div>
           </div>
@@ -106,8 +97,12 @@ function Skills() {
             - Remove
           </Button>
         </div>
-        <Button disabled={loading} onClick={() => onSave()}>
-          {loading ? <LoaderCircle className="animate-spin" /> : "Save"}
+        <Button disabled={postState?.isSuccess} onClick={() => onSave()}>
+          {postState?.isSuccess ? (
+            <LoaderCircle className="animate-spin" />
+          ) : (
+            "Save"
+          )}
         </Button>
       </div>
     </div>

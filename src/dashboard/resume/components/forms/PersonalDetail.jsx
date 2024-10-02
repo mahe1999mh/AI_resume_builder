@@ -4,12 +4,13 @@ import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import { LoaderCircle } from "lucide-react";
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import GlobalApi from "./../../../../../service/GlobalApi";
-import { toast } from "sonner";
+
+import { useUpdateResumeDetailMutation } from "@/redux/resume/resumeApi";
 
 function PersonalDetail() {
   const params = useParams();
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
+  const [post, postState] = useUpdateResumeDetailMutation();
 
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
@@ -19,39 +20,27 @@ function PersonalDetail() {
     setFormData(resumeInfo);
   }, [resumeInfo]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     const { name, value } = e.target;
     console.log(formData);
 
-
-    setFormData((prevFormData) => ({
+    setFormData(prevFormData => ({
       ...prevFormData,
       [name]: value,
     }));
 
     console.log(name, value);
 
-    setResumeInfo((prevResumeInfo) => ({
+    setResumeInfo(prevResumeInfo => ({
       ...prevResumeInfo,
       [name]: value,
     }));
   };
 
-  const onSave = (e) => {
+  const onSave = e => {
     e.preventDefault();
-    setLoading(true);
 
-    GlobalApi.UpdateResumeDetail(params?.resumeId, formData).then(
-      (resp) => {
-        console.log(resp);
-
-        setLoading(false);
-        toast("Details updated");
-      },
-      (error) => {
-        setLoading(false);
-      }
-    );
+    post({ id: params.resumeId, data });
   };
 
   return (
@@ -95,7 +84,7 @@ function PersonalDetail() {
                   type="radio"
                   name="expirence"
                   value="fresher"
-                  checked={resumeInfo?.expirence === 'fresher'}
+                  checked={resumeInfo?.expirence === "fresher"}
                   onChange={handleInputChange}
                 />
                 <span className="ml-2">Fresher</span>
@@ -105,7 +94,7 @@ function PersonalDetail() {
                   type="radio"
                   name="expirence"
                   value="expirenced"
-                  checked={resumeInfo?.expirence === 'expirenced'}
+                  checked={resumeInfo?.expirence === "expirenced"}
                   onChange={handleInputChange}
                 />
                 <span className="ml-2">Expirence</span>
@@ -159,8 +148,12 @@ function PersonalDetail() {
           </div>
         </div>
         <div className="mt-3 flex justify-end">
-          <Button type="submit" disabled={loading}>
-            {loading ? <LoaderCircle className="animate-spin" /> : "Save"}
+          <Button type="submit" disabled={postState?.isLoading}>
+            {postState?.isLoading ? (
+              <LoaderCircle className="animate-spin" />
+            ) : (
+              "Save"
+            )}
           </Button>
         </div>
       </form>

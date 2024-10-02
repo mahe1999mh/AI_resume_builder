@@ -5,11 +5,11 @@ import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import { LoaderCircle } from "lucide-react";
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import GlobalApi from "./../../../../../service/GlobalApi";
-import { toast } from "sonner";
+import { useUpdateResumeDetailMutation } from "@/redux/resume/resumeApi";
 
 function Education() {
-  const [loading, setLoading] = useState(false);
+  const [post, postState] = useUpdateResumeDetailMutation();
+
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
   const params = useParams();
   const [educationalList, setEducationalList] = useState([
@@ -27,10 +27,13 @@ function Education() {
     resumeInfo && setEducationalList(resumeInfo?.education);
   }, []);
   const handleChange = (event, index) => {
-    const newEntries = educationalList.slice();
     const { name, value } = event.target;
-    newEntries[index][name] = value;
-    setEducationalList(newEntries);
+
+    setEducationalList(prev => {
+      return prev?.map((list, i) =>
+        index == i ? { ...list, [name]: value } : list
+      );
+    });
   };
 
   const AddNewEducation = () => {
@@ -50,22 +53,10 @@ function Education() {
     setEducationalList(educationalList => educationalList.slice(0, -1));
   };
   const onSave = () => {
-    setLoading(true);
     const data = {
       education: educationalList.map(({ id, ...rest }) => rest),
     };
-
-    GlobalApi.UpdateResumeDetail(params.resumeId, data).then(
-      resp => {
-        console.log(resp);
-        setLoading(false);
-        toast("Details updated !");
-      },
-      error => {
-        setLoading(false);
-        toast("Server Error, Please try again!");
-      }
-    );
+    post({ id: params.resumeId, data });
   };
 
   useEffect(() => {
@@ -88,7 +79,7 @@ function Education() {
                 <Input
                   name="universityName"
                   onChange={e => handleChange(e, index)}
-                  defaultValue={item?.universityName}
+                  defaultValue={item?.universityName ?? ""}
                 />
               </div>
               <div>
@@ -96,7 +87,7 @@ function Education() {
                 <Input
                   name="degree"
                   onChange={e => handleChange(e, index)}
-                  defaultValue={item?.degree}
+                  defaultValue={item?.degree ?? ""}
                 />
               </div>
               <div>
@@ -144,7 +135,6 @@ function Education() {
             onClick={AddNewEducation}
             className="text-primary"
           >
-            {" "}
             + Add More Education
           </Button>
           <Button
@@ -152,12 +142,15 @@ function Education() {
             onClick={RemoveEducation}
             className="text-primary"
           >
-            {" "}
             - Remove
           </Button>
         </div>
-        <Button disabled={loading} onClick={() => onSave()}>
-          {loading ? <LoaderCircle className="animate-spin" /> : "Save"}
+        <Button disabled={postState?.isLoading} onClick={() => onSave()}>
+          {postState?.isLoading ? (
+            <LoaderCircle className="animate-spin" />
+          ) : (
+            "Save"
+          )}
         </Button>
       </div>
     </div>
