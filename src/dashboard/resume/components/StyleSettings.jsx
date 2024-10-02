@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SlidersHorizontal } from "lucide-react";
 import {
   Popover,
@@ -7,6 +7,12 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
+import { useDispatch } from "react-redux";
+import {
+  setFont,
+  setFontSize,
+  setFontColor,
+} from "./../../../redux/resume/styleSlice";
 
 const fonts = [
   "Arial",
@@ -17,20 +23,34 @@ const fonts = [
 ];
 
 const StyleSettings = () => {
+  const dispatch = useDispatch();
   const [formState, setFormState] = useState({
-    fonts: fonts[0],
+    fonts: fonts[2],
     fontSize: 16,
     fontColor: "#000000",
   });
 
   const onChangeHandle = e => {
     const { name, value } = e.target;
+
     setFormState(prev => ({ ...prev, [name]: value }));
   };
 
   const handleFontSizeChange = value => {
     setFormState(prev => ({ ...prev, fontSize: value[0] }));
   };
+
+  useEffect(() => {
+    dispatch(setFont(formState.fonts));
+  }, [dispatch, formState.fonts]);
+
+  useEffect(() => {
+    dispatch(setFontSize(formState.fontSize));
+  }, [dispatch, formState.fontSize]);
+
+  useEffect(() => {
+    dispatch(setFontColor(formState.fontColor));
+  }, [dispatch, formState.fontColor]);
 
   return (
     <>
