@@ -28,13 +28,13 @@ function ResumeCardItem({ resume, refreshData }) {
   const onDelete = () => {
     setLoading(true);
     GlobalApi.DeleteResumeById(resume?._id).then(
-      resp => {
+      (resp) => {
         toast("Resume Deleted!");
         refreshData();
         setLoading(false);
         setOpenAlert(false);
       },
-      error => {
+      (error) => {
         setLoading(false);
       }
     );
