@@ -7,7 +7,7 @@ function SummeryPreview({ resumeInfo }) {
   if (!resumeInfo) return null;
   return (
     <p
-      className="text-xs"
+      className="text-xs text-justify"
       style={{ fontFamily: fonts, fontSize, color: fontColor }}
     >
       {resumeInfo?.summary ?? ""}

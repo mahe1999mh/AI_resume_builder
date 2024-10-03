@@ -31,16 +31,13 @@ function ExperiencePreview({ resumeInfo }) {
           <h2 className="text-xs flex justify-between">
             {experience?.companyName},{experience?.city},{experience?.state}
             <span>
-              {experience?.startDate} To{" "}
-              {experience?.currentlyWorking ? "Present" : experience?.endDate}{" "}
+              {experience?.startDate.slice(0, 7)} To{" "}
+              {experience?.currentlyWorking ? "Present" : experience?.endDate.slice(0, 7)}{" "}
             </span>
           </h2>
-          {/* <p className='text-xs my-2'>
-                    {experience.workSummery}
-                </p> */}
           <div
-            className="text-xs my-2"
-            dangerouslySetInnerHTML={{ __html: experience?.workSummery }}
+            className="text-xs my-2 text-justify"
+            dangerouslySetInnerHTML={{ __html: experience?.workSummary }}
           />
         </div>
       ))}
