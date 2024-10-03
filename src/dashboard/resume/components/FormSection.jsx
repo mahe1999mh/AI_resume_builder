@@ -7,6 +7,7 @@ import Summery from "./forms/Summery";
 import Experience from "./forms/Experience";
 import Education from "./forms/Education";
 import Skills from "./forms/Skills";
+import SoftSkills from "./forms/SoftSkills";
 import ThemeColor from "./ThemeColor";
 import Projects from "./forms/Project";
 
@@ -30,7 +31,7 @@ const FormSection = () => {
           )}
           <Button
             size="sm"
-            disabled={activeFormIndex >= 7}
+            disabled={activeFormIndex >= 8}
             className="flex gap-2"
             onClick={() => setActiveFormIndex(activeFormIndex + 1)}
           >
@@ -45,7 +46,8 @@ const FormSection = () => {
       {activeFormIndex == 4 && <Experience />}
       {activeFormIndex == 5 && <Education />}
       {activeFormIndex == 6 && <Skills />}
-      {activeFormIndex == 7 && (
+      {activeFormIndex == 7 && <SoftSkills />}
+      {activeFormIndex == 8 && (
         <Navigate to={"/my-resume/" + resumeId + "/view"} />
       )}
     </div>

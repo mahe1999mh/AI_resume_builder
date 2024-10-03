@@ -6,6 +6,7 @@ import SummeryPreview from "./preview/SummeryPreview";
 import EducationalPreview from "./preview/EducationalPreview";
 import SkillsPreview from "./preview/SkillsPreview";
 import html2pdf from "html2pdf.js";
+import ProjectPreview from "./preview/ProjectPreview";
 
 export const generatePdf = () => {
   const element = document.getElementById("content");
@@ -40,6 +41,8 @@ const ResumePreview = () => {
         <SummeryPreview resumeInfo={resumeInfo} />
         {/* Professional Experience  */}
         <ExperiencePreview resumeInfo={resumeInfo} />
+        {/* Project  */}
+        <ProjectPreview resumeInfo={resumeInfo} />
         {/* Educational  */}
         <EducationalPreview resumeInfo={resumeInfo} />
         {/* Skills  */}
