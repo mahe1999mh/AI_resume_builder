@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import PersonalDetailPreview from "./preview/PersonalDetailPreview";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import ExperiencePreview from "./preview/ExperiencePreview";
@@ -7,6 +7,10 @@ import EducationalPreview from "./preview/EducationalPreview";
 import SkillsPreview from "./preview/SkillsPreview";
 import html2pdf from "html2pdf.js";
 import ProjectPreview from "./preview/ProjectPreview";
+import { useUser } from "@clerk/clerk-react";
+import { useGetUserResumesQuery } from "@/redux/resume/resumeApi";
+import { useDispatch } from "react-redux";
+import { updatePersonalDetail } from "@/redux/resume/resumeSlice";
 
 export const generatePdf = () => {
   const element = document.getElementById("content");
@@ -23,7 +27,23 @@ export const generatePdf = () => {
 };
 
 const ResumePreview = () => {
-  const { resumeInfo } = useContext(ResumeInfoContext);
+  // const { resumeInfo } = useContext(ResumeInfoContext);
+  const { user } = useUser();
+  const {
+    data: resumeInfo,
+    isLoading,
+    isFetching,
+  } = useGetUserResumesQuery(user?.primaryEmailAddress?.emailAddress);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (resumeInfo && resumeInfo?.[0]?.personal) {
+      dispatch(updatePersonalDetail(resumeInfo?.[0]?.personal));
+    }
+  }, [resumeInfo, dispatch]);
+
+  console.log(resumeInfo, "resumeInforesumeInfo");
+
   if (!resumeInfo) return null;
 
   return (
@@ -36,9 +56,9 @@ const ResumePreview = () => {
         }}
       >
         {/* PersonalDetailPreview */}
-        <PersonalDetailPreview resumeInfo={resumeInfo} />
+        <PersonalDetailPreview />
         {/* Summery  */}
-        <SummeryPreview resumeInfo={resumeInfo} />
+        <SummeryPreview />
         {/* Professional Experience  */}
         <ExperiencePreview resumeInfo={resumeInfo} />
         {/* Project   */}

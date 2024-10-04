@@ -7,6 +7,8 @@ import { Brain, LoaderCircle } from "lucide-react";
 import { toast } from "sonner";
 import { AIChatSession } from "./../../../../../service/AIModal";
 import { useUpdateResumeDetailMutation } from "@/redux/resume/resumeApi";
+import { useDispatch } from "react-redux";
+import { setSummaryData } from "@/redux/resume/resumeSlice";
 
 const prompt =
   "Job Title: {jobTitle} , Depends on job title give me list of summary for 3 experience levels, Mid Level and Fresher level in 3-4 lines in array format, With summary and experience_level Field in JSON Format";
@@ -14,6 +16,8 @@ const prompt =
 function Summary() {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
   const [summary, setSummary] = useState(resumeInfo?.summary || "");
+
+  const diplatch = useDispatch()
 
   const [post, postState] = useUpdateResumeDetailMutation();
 
@@ -77,7 +81,11 @@ function Summary() {
             className="mt-5"
             required
             value={summary}
-            onChange={e => setSummary(e.target.value)}
+            onChange={e => {
+              setSummary(e.target.value)
+              diplatch(setSummaryData(e.target.value))
+            
+            }}
           />
           <div className="mt-2 flex justify-end">
             <Button type="submit" disabled={postState?.isLoading}>
