@@ -1,121 +1,144 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useUpdateResumeDetailMutation } from "@/redux/resume/resumeApi";
 import { LoaderCircle } from "lucide-react";
-import React, { useState } from "react";
+import { ResumeInfoContext } from "@/context/ResumeInfoContext";
+import React, { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 const Projects = () => {
-  const [projectList, setprojectList] = useState([
-    {
-      projectName: "",
-      startDate: "",
-      endDate: "",
-      description: "",
-    },
-  ]);
+  const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
+  const [post, postState] = useUpdateResumeDetailMutation();
+  const params = useParams();
+  const [projectList, setProjectList] = useState([]);
 
-  const AddNewProject = () => {
-    setprojectList(prev => [
+  // Add a new project entry to the list
+  const addNewProject = () => {
+    setProjectList(prev => [
       ...prev,
-      {
-        projectName: "",
-        startDate: "",
-        endDate: "",
-        description: "",
-      },
+      { title: "", startDate: "", endDate: "", summary: "" },
     ]);
   };
 
-  const RemoveProject = () => {
-    setprojectList(prevList => {
-      const newList = [...prevList];
-      newList.pop();
-      return newList;
-    });
+  // Remove the last project entry from the list, preventing deletion of the last project
+  const removeProject = () => {
+    setProjectList(prevList =>
+      prevList.length > 1 ? prevList.slice(0, -1) : prevList
+    );
   };
 
+  // Handle input changes for project fields
   const handleChange = (e, index) => {
     const { name, value } = e.target;
-    setprojectList(prev => {
-      return prev.map((item, i) =>
-        i == index ? { ...item, [name]: value } : item
-      );
-    });
+    setProjectList(prev =>
+      prev.map((item, i) => (i === index ? { ...item, [name]: value } : item))
+    );
   };
 
-  return (
-    <>
-      <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4 mt-10">
-        <h2 className="font-bold text-lg">Projects</h2>
-        <p>Add Your Projects details</p>
-        <div></div>
+  // Save project list to the server
+  const onSave = async () => {
+    const hasErrors = projectList.some(
+      project => !project.title || !project.startDate
+    );
 
-        {projectList?.map((item, index) => (
-          <>
-            <div
-              key={index}
-              className="grid grid-cols-2 gap-3 border p-3 my-5 rounded-lg"
-            >
-              <div className="col-span-2">
-                <label>Project Name</label>
-                <Input
-                  name="projectName"
-                  onChange={e => handleChange(e, index)}
-                  defaultValue={item?.projectName}
-                />
-              </div>
-              <div>
-                <label>Start Date</label>
-                <Input
-                  type="date"
-                  name="startDate"
-                  onChange={e => handleChange(e, index)}
-                  defaultValue={item?.startDate}
-                />
-              </div>
-              <div>
-                <label>End Date</label>
-                <Input
-                  type="date"
-                  name="endDate"
-                  onChange={e => handleChange(e, index)}
-                  defaultValue={item?.endDate}
-                />
-              </div>
-              <div className="col-span-2">
-                <label>Description</label>
-                <Textarea
-                  name="description"
-                  onChange={e => handleChange(e, index)}
-                  defaultValue={item?.description}
-                />
-              </div>
-            </div>
-          </>
-        ))}
-        <div className="flex justify-between">
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={AddNewProject}
-              className="text-primary"
-            >
-              + Add More Experience
-            </Button>
-            <Button
-              variant="outline"
-              onClick={RemoveProject}
-              className="text-primary"
-            >
-              - Remove
-            </Button>
+    if (hasErrors) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    const data = { projects: [...projectList] };
+    post({ id: params.resumeId, data }).unwrap(); // Assuming unwrap is used for error handling
+  };
+
+  // Load existing project data from resumeInfo on component mount
+  useEffect(() => {
+    if (resumeInfo?.projects?.length > 0) {
+      setProjectList(resumeInfo.projects);
+    }
+  }, [resumeInfo]);
+
+  // Update resumeInfo only when projectList changes
+  useEffect(() => {
+    setResumeInfo(prev => ({
+      ...prev,
+      projects: projectList,
+    }));
+  }, [projectList]);
+
+  return (
+    <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4 mt-10">
+      <h2 className="font-bold text-lg">Projects</h2>
+      <p>Add Your Projects details</p>
+
+      {projectList.map((item, index) => (
+        <div
+          key={index}
+          className="grid grid-cols-2 gap-3 border p-3 my-5 rounded-lg"
+        >
+          <div className="col-span-2">
+            <label>Project Name</label>
+            <Input
+              name="title"
+              value={item.title || ""}
+              onChange={e => handleChange(e, index)}
+            />
           </div>
-          {/* <Button disabled={loading} onClick={onSave}>
-          {loading ? <LoaderCircle className="animate-spin" /> : "Save"}
-        </Button> */}
+          <div>
+            <label>Start Date</label>
+            <Input
+              type="date"
+              name="startDate"
+              value={item.startDate || ""}
+              onChange={e => handleChange(e, index)}
+            />
+          </div>
+          <div>
+            <label>End Date</label>
+            <Input
+              type="date"
+              name="endDate"
+              value={item.endDate || ""}
+              onChange={e => handleChange(e, index)}
+            />
+          </div>
+          <div className="col-span-2">
+            <label>Description</label>
+            <Textarea
+              name="summary"
+              value={item.summary || ""}
+              onChange={e => handleChange(e, index)}
+            />
+          </div>
         </div>
+      ))}
+
+      <div className="flex justify-between">
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={addNewProject}
+            className="text-primary"
+          >
+            + Add More Experience
+          </Button>
+          <Button
+            variant="outline"
+            onClick={removeProject}
+            className="text-primary"
+          >
+            - Remove
+          </Button>
+        </div>
+        <Button disabled={postState?.isLoading} onClick={onSave}>
+          {postState?.isLoading ? (
+            <LoaderCircle className="animate-spin" />
+          ) : (
+            "Save"
+          )}
+        </Button>
       </div>
-    </>
+    </div>
   );
 };
 

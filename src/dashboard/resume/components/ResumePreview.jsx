@@ -36,13 +36,14 @@ const ResumePreview = () => {
         }}
       >
         {/* PersonalDetailPreview */}
-        <PersonalDetailPreview resumeInfo={resumeInfo} />
+        <PersonalDetailPreview resumeInfo={resumeInfo?.personal} />
         {/* Summery  */}
         <SummeryPreview resumeInfo={resumeInfo} />
-        {/* Professional Experience  */}
-        <ExperiencePreview resumeInfo={resumeInfo} />
         {/* Project   */}
         <ProjectPreview resumeInfo={resumeInfo} />
+        {/* Professional Experience  */}
+        <ExperiencePreview resumeInfo={resumeInfo} />
+
         {/* Educational  */}
         <EducationalPreview resumeInfo={resumeInfo} />
         {/* Skills  */}

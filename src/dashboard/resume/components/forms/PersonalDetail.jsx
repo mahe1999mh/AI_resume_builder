@@ -4,7 +4,6 @@ import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import { LoaderCircle } from "lucide-react";
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
 import { useUpdateResumeDetailMutation } from "@/redux/resume/resumeApi";
 
 function PersonalDetail() {
@@ -12,34 +11,60 @@ function PersonalDetail() {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
   const [post, postState] = useUpdateResumeDetailMutation();
 
-  const [formData, setFormData] = useState({});
+  // Initialize formData with default structure to avoid undefined errors
+  const [formData, setFormData] = useState({
+    personal: {
+      address: "",
+      email: "",
+      firstName: "",
+      lastName: "",
+      github: "",
+      isExperience: true,
+      jobTitle: "",
+      linkedin: "",
+      phone: "",
+    },
+  });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    console.log("---", resumeInfo);
-    setFormData(resumeInfo);
+    if (resumeInfo) {
+      // Set form data with resumeInfo if available
+      setFormData(prevData => ({
+        ...prevData,
+        personal: {
+          ...resumeInfo?.personal,
+          isExperience:
+            resumeInfo?.personal?.isExperience !== undefined
+              ? resumeInfo.personal.isExperience
+              : true,
+        },
+      }));
+    }
   }, [resumeInfo]);
 
   const handleInputChange = e => {
     const { name, value } = e.target;
-    console.log(formData);
-
     setFormData(prevFormData => ({
       ...prevFormData,
-      [name]: value,
+      personal: {
+        ...prevFormData.personal,
+        [name]: value,
+      },
     }));
-
-    console.log(name, value);
 
     setResumeInfo(prevResumeInfo => ({
       ...prevResumeInfo,
-      [name]: value,
+      personal: {
+        ...prevResumeInfo?.personal,
+        [name]: value,
+      },
     }));
   };
 
   const onSave = e => {
     e.preventDefault();
-
+    const data = { personal: formData.personal };
     post({ id: params.resumeId, data });
   };
 
@@ -54,7 +79,7 @@ function PersonalDetail() {
             <label className="text-sm">First Name</label>
             <Input
               name="firstName"
-              defaultValue={resumeInfo?.firstName}
+              defaultValue={resumeInfo?.personal?.firstName || ""}
               required
               onChange={handleInputChange}
             />
@@ -65,7 +90,7 @@ function PersonalDetail() {
               name="lastName"
               required
               onChange={handleInputChange}
-              defaultValue={resumeInfo?.lastName}
+              defaultValue={resumeInfo?.personal?.lastName || ""}
             />
           </div>
           <div className="col-span-2">
@@ -73,7 +98,7 @@ function PersonalDetail() {
             <Input
               name="jobTitle"
               required
-              defaultValue={resumeInfo?.jobTitle}
+              defaultValue={resumeInfo?.personal?.jobTitle || ""}
               onChange={handleInputChange}
             />
           </div>
@@ -82,22 +107,30 @@ function PersonalDetail() {
               <label className="flex items-center">
                 <Input
                   type="radio"
-                  name="expirence"
+                  name="isExperience"
                   value="fresher"
-                  checked={resumeInfo?.expirence === "fresher"}
-                  onChange={handleInputChange}
+                  checked={!formData.personal.isExperience}
+                  onChange={() =>
+                    handleInputChange({
+                      target: { name: "isExperience", value: false },
+                    })
+                  }
                 />
                 <span className="ml-2">Fresher</span>
               </label>
               <label className="flex items-center">
                 <Input
                   type="radio"
-                  name="expirence"
-                  value="expirenced"
-                  checked={resumeInfo?.expirence === "expirenced"}
-                  onChange={handleInputChange}
+                  name="isExperience"
+                  value="experienced"
+                  checked={formData.personal.isExperience}
+                  onChange={() =>
+                    handleInputChange({
+                      target: { name: "isExperience", value: true },
+                    })
+                  }
                 />
-                <span className="ml-2">Expirence</span>
+                <span className="ml-2">Experienced</span>
               </label>
             </div>
           </div>
@@ -106,7 +139,7 @@ function PersonalDetail() {
             <Input
               name="address"
               required
-              defaultValue={resumeInfo?.address}
+              defaultValue={resumeInfo?.personal?.address || ""}
               onChange={handleInputChange}
             />
           </div>
@@ -115,7 +148,7 @@ function PersonalDetail() {
             <Input
               name="phone"
               required
-              defaultValue={resumeInfo?.phone}
+              defaultValue={resumeInfo?.personal?.phone || ""}
               onChange={handleInputChange}
             />
           </div>
@@ -124,7 +157,7 @@ function PersonalDetail() {
             <Input
               name="email"
               required
-              defaultValue={resumeInfo?.email}
+              defaultValue={resumeInfo?.personal?.email || ""}
               onChange={handleInputChange}
             />
           </div>
@@ -133,7 +166,7 @@ function PersonalDetail() {
             <Input
               name="linkedin"
               required
-              defaultValue={resumeInfo?.linkedin}
+              defaultValue={resumeInfo?.personal?.linkedin || ""}
               onChange={handleInputChange}
             />
           </div>
@@ -142,7 +175,7 @@ function PersonalDetail() {
             <Input
               name="github"
               required
-              defaultValue={resumeInfo?.github}
+              defaultValue={resumeInfo?.personal?.github || ""}
               onChange={handleInputChange}
             />
           </div>
@@ -150,7 +183,9 @@ function PersonalDetail() {
         <div className="mt-3 flex justify-end">
           <Button type="submit" disabled={postState?.isLoading}>
             {postState?.isLoading ? (
-              <LoaderCircle className="animate-spin" />
+              <div className="flex justify-center">
+                <LoaderCircle className="animate-spin" />
+              </div>
             ) : (
               "Save"
             )}

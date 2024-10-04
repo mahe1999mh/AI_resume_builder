@@ -6,12 +6,14 @@ function SummeryPreview({ resumeInfo }) {
   const { fonts, fontSize, fontColor } = useSelector(state => state?.styles);
   if (!resumeInfo) return null;
   return (
-    <p
-      className="text-xs text-justify"
-      style={{ fontFamily: fonts, fontSize, color: fontColor }}
-    >
-      {resumeInfo?.summary ?? ""}
-    </p>
+    <>
+      <p
+        className="text-xs text-justify"
+        style={{ fontFamily: fonts, fontSize, color: fontColor }}
+      >
+        {resumeInfo?.summary ?? ""}
+      </p>
+    </>
   );
 }
 
