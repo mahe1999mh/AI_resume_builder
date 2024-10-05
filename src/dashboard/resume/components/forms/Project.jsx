@@ -1,17 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { useUpdateResumeDetailMutation } from "@/redux/resume/resumeApi";
 import { LoaderCircle } from "lucide-react";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import TextEditor from "@/components/custom/RichTextEditor";
 
 const Projects = () => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
   const [post, postState] = useUpdateResumeDetailMutation();
   const params = useParams();
-  const [projectList, setProjectList] = useState([]);
+  const [projectList, setProjectList] = useState(resumeInfo?.projects || []);
 
   // Add a new project entry to the list
   const addNewProject = () => {
@@ -36,6 +36,28 @@ const Projects = () => {
     );
   };
 
+  const useDebounce = (callback, delay) => {
+    const timer = useRef();
+
+    const debouncedCallback = (...args) => {
+      if (timer.current) {
+        clearTimeout(timer.current);
+      }
+      timer.current = setTimeout(() => {
+        callback(...args);
+      }, delay);
+    };
+
+    return debouncedCallback;
+  };
+
+  // Handle changes in the rich text editor
+  const handleEditorChange = useDebounce((value, index) => {
+    setProjectList(prev =>
+      prev.map((item, i) => (i === index ? { ...item, summary: value } : item))
+    );
+  }, 10);
+
   // Save project list to the server
   const onSave = async () => {
     const hasErrors = projectList.some(
@@ -47,8 +69,13 @@ const Projects = () => {
       return;
     }
 
-    const data = { projects: [...projectList] };
-    post({ id: params.resumeId, data }).unwrap(); // Assuming unwrap is used for error handling
+    try {
+      const data = { projects: [...projectList] };
+      await post({ id: params.resumeId, data }).unwrap();
+      alert("Projects saved successfully!");
+    } catch (error) {
+      alert("Error saving projects. Please try again.");
+    }
   };
 
   // Load existing project data from resumeInfo on component mount
@@ -64,7 +91,7 @@ const Projects = () => {
       ...prev,
       projects: projectList,
     }));
-  }, [projectList]);
+  }, [projectList, setResumeInfo]);
 
   return (
     <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4 mt-10">
@@ -104,10 +131,9 @@ const Projects = () => {
           </div>
           <div className="col-span-2">
             <label>Description</label>
-            <Textarea
-              name="summary"
-              value={item.summary || ""}
-              onChange={e => handleChange(e, index)}
+            <TextEditor
+              onTextEditorChange={value => handleEditorChange(value, index)}
+              defaultValue={item.summary || ""}
             />
           </div>
         </div>
