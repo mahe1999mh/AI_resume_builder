@@ -6,6 +6,7 @@ import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import TextEditor from "@/components/custom/RichTextEditor";
+import useDebounce from "@/components/hooks/useDebounce";
 
 const Projects = () => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
@@ -34,21 +35,6 @@ const Projects = () => {
     setProjectList(prev =>
       prev.map((item, i) => (i === index ? { ...item, [name]: value } : item))
     );
-  };
-
-  const useDebounce = (callback, delay) => {
-    const timer = useRef();
-
-    const debouncedCallback = (...args) => {
-      if (timer.current) {
-        clearTimeout(timer.current);
-      }
-      timer.current = setTimeout(() => {
-        callback(...args);
-      }, delay);
-    };
-
-    return debouncedCallback;
   };
 
   // Handle changes in the rich text editor
