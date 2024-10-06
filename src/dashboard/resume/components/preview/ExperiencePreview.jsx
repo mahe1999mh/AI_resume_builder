@@ -1,7 +1,7 @@
 import React from "react";
 
 function ExperiencePreview({ resumeInfo }) {
-  if (!resumeInfo || resumeInfo.expirence === 'fresher') return null;
+  if (!resumeInfo || resumeInfo.expirence === "fresher") return null;
   return (
     <div className="my-6">
       <h2
@@ -28,13 +28,17 @@ function ExperiencePreview({ resumeInfo }) {
           >
             {experience?.title}
           </h2>
-          <h2 className="text-xs flex justify-between">
-            {experience?.companyName},{experience?.city},{experience?.state}
-            <span>
+          <h2 className="text-sx flex justify-between">
+            {`${experience?.companyName}, ${experience?.city}, ${experience?.state}`}
+
+            <span className="text-xs font-normal">
               {experience?.startDate.slice(0, 7)} To{" "}
-              {experience?.currentlyWorking ? "Present" : experience?.endDate.slice(0, 7)}{" "}
+              {experience?.currentlyWorking
+                ? "Present"
+                : experience?.endDate.slice(0, 7)}
             </span>
           </h2>
+
           <div
             className="text-xs my-2 text-justify"
             dangerouslySetInnerHTML={{ __html: experience?.workSummary }}
