@@ -95,3 +95,6 @@
     @apply bg-background text-foreground;
   }
 }
+.btn-text {
+  font-size: 17px;
+}

@@ -1,24 +1,82 @@
-import { LoaderCircle } from "lucide-react";
+import {
+  LoaderCircle,
+  ShieldAlert,
+  Check,
+  Bookmark,
+  Plus,
+  X,
+} from "lucide-react";
+import { useState } from "react";
+import { Button as Button2 } from "@/components/ui/button";
 
-const Button = ({ children, backgroundColor, color, loading }) => {
+const Button = ({
+  children,
+  icon,
+  loading,
+  success,
+  error,
+  variant,
+  ...rest
+}) => {
+  const [isClicked, setIsClicked] = useState(false);
+
+  const handleClick = (e) => {
+    if (rest.disabled) return;
+    setIsClicked(true);
+    setTimeout(() => {
+      setIsClicked(false);
+    }, 1000);
+    rest.onClick?.(e);
+  };
+
   return (
-    <button
-      style={{
-        backgroundColor: backgroundColor ? backgroundColor : "blue",
-        textTransform: "capitalize",
-        letterSpacing: "0.54px",
-        padding: "0.444rem 1rem",
-        fontSize: "0.84rem",
-        position: "relative",
-        overflow: "hidden",
-        minWidth: "80px",
-        cursor: "pointer",
-        borderRadius: "5px",
-        color: color ? color : "white",
-      }}
+    <Button2
+      variant={variant}
+      onClick={handleClick}
+      disabled={loading || isClicked || rest.disabled}
+      {...rest}
     >
-      {loading ? <LoaderCircle className="animate-spin" /> : children}
-    </button>
+      <span
+        className="btn-text"
+        style={{ display: "flex", alignItems: "center" }}
+      >
+        {loading ? (
+          <LoaderCircle className="animate-spin" />
+        ) : success ? (
+          <Check color="white" size={24} strokeWidth={3} />
+        ) : error ? (
+          <ShieldAlert color="red" size={24} />
+        ) : (
+          icon
+        )}
+        {children}
+      </span>
+    </Button2>
   );
 };
+
 export default Button;
+
+export const AddButton = ({ children, ...rest }) => {
+  return (
+    <Button icon={<Plus size={24} color="white" />} {...rest}>
+      {children || "Add"}
+    </Button>
+  );
+};
+
+export const CloseButton = ({ children, ...rest }) => {
+  return (
+    <Button icon={<X size={24} color="grey" />} {...rest}>
+      {children || "Close"}
+    </Button>
+  );
+};
+
+export const SubmitButton = ({ children, ...rest }) => {
+  return (
+    <Button icon={<Bookmark size={24} color="white" />} {...rest}>
+      {children || "Submit"}
+    </Button>
+  );
+};

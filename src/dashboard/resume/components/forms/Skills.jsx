@@ -1,110 +1,257 @@
 import { Input } from "@/components/ui/input";
-import React, { useContext, useEffect, useState } from "react";
-// import '@smastrom/react-rating/style.css'
-import { Button } from "@/components/ui/button";
-import { LoaderCircle } from "lucide-react";
+import { useContext, useEffect, useState } from "react";
+import { Plus } from "lucide-react";
+import Button, { AddButton } from "@/components/custom/Button";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { Chip } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import CloseIcon from "@mui/icons-material/Close";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import { useParams } from "react-router-dom";
 import { useUpdateResumeDetailMutation } from "@/redux/resume/resumeApi";
-function Skills() {
-  const [skillsList, setSkillsList] = useState([
-    {
-      name: "",
-      rating: 0,
-    },
-  ]);
+import { useParams } from "react-router-dom";
 
+function Skills() {
+  const inBuildSkills = {
+    technicalSkills: ["ReactJS", "NodeJS", "HTML", "CSS"],
+    softSkills: ["Communication", "TeamWork", "Problem-Solving"],
+  };
+  const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
+  const [post, postState] = useUpdateResumeDetailMutation();
   const params = useParams();
 
-  const [post, postState] = useUpdateResumeDetailMutation();
+  console.log(resumeInfo, "resumeInfotharu");
 
-  const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
+  const [skillsList, setSkillsList] = useState({
+    technicalSkills: [],
+    softSkills: [],
+  });
+
+  const [formState, setFormState] = useState({
+    technicalSkills: "",
+    softSkills: "",
+  });
+
+  const onChange = (e) => {
+    setFormState({ ...formState, [e.target.name]: e.target.value });
+  };
 
   useEffect(() => {
-    resumeInfo && setSkillsList(resumeInfo?.skills);
-  }, []);
-
-  const handleChange = (index, name, value) => {
-    setSkillsList(prevList =>
-      prevList.map((item, i) =>
-        i === index ? { ...item, [name]: value } : item
-      )
-    );
-  };
-
-  const AddNewSkills = () => {
-    setSkillsList([
-      ...skillsList,
-      {
-        name: "",
-        rating: 0,
+    const { technicalSkills, softSkills } = skillsList;
+    setResumeInfo((prev) => ({
+      ...prev,
+      Skills: {
+        technicalSkills: [...technicalSkills],
+        softSkills: [...softSkills],
       },
-    ]);
+    }));
+  }, [skillsList, setResumeInfo]);
+
+  const handleAddSkill = (module) => {
+    if (
+      skillsList?.[module]?.some(
+        (li) => li?.toLowerCase() === formState?.[module].toLowerCase()
+      )
+    ) {
+      return alert("This skill is already added");
+    }
+
+    if (formState?.[module]) {
+      setSkillsList((prev) => ({
+        ...prev,
+        [module]: [...prev[module], formState?.[module]],
+      }));
+      setFormState({
+        technicalSkills: "",
+        softSkills: "",
+      });
+    }
   };
-  const RemoveSkills = () => {
-    setSkillsList(skillsList => skillsList.slice(0, -1));
+  const handleAddDefaultSkill = (value, module) => {
+    if (
+      skillsList?.[module]?.some(
+        (li) => li?.toLowerCase() === value.toLowerCase()
+      )
+    ) {
+      return alert("This skill is already added");
+    }
+    if (value) {
+      setSkillsList((prev) => ({
+        ...prev,
+        [module]: [...prev[module], value],
+      }));
+    }
+  };
+  const handleRemoveSkill = (index, module) => {
+    setSkillsList((prev) => ({
+      ...prev,
+      [module]: prev[module].filter((_, idx) => idx !== index),
+    }));
   };
 
   const onSave = () => {
+    const { technicalSkills, softSkills } = skillsList;
     const data = {
-      skills: skillsList.map(({ id, ...rest }) => rest),
+      skills: {
+        technicalSkills: [...technicalSkills],
+        softSkills: [...softSkills],
+      },
     };
     post({ id: params.resumeId, data });
   };
-
   useEffect(() => {
-    setResumeInfo({
-      ...resumeInfo,
-      skills: skillsList,
-    });
-  }, [skillsList]);
+    if (postState?.isSuccess) {
+      setTimeout(() => {
+        postState?.reset();
+      }, 3000);
+    }
+  }, [postState]);
   return (
     <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4 mt-10">
       <h2 className="font-bold text-lg">Skills</h2>
       <p>Add Your top professional key skills</p>
 
-      <div>
-        {skillsList.map((item, index) => (
-          <div className="flex justify-between mb-2 border rounded-lg p-3 ">
-            <div>
-              <label className="text-xs">Name</label>
-              <Input
-                className="w-full"
-                name="name"
-                defaultValue={item.name}
-                onChange={e => handleChange(index, "name", e.target.value)}
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="flex justify-between">
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            onClick={AddNewSkills}
+      <div className="py-4">
+        <h2 className="font-bold text-sm">Technical Skills</h2>
+        <div className="flex gap-3">
+          <Input
+            className="w-50"
+            name="technicalSkills"
+            value={formState?.technicalSkills}
+            onChange={(e) => onChange(e)}
+          />
+          <AddButton
             className="text-primary"
+            variant={"outline"}
+            icon={<Plus size={20} color="rgb(159 91 255)" />}
+            onClick={() => handleAddSkill("technicalSkills")}
           >
-            {" "}
-            + Add More Skill
-          </Button>
-          <Button
-            variant="outline"
-            onClick={RemoveSkills}
-            className="text-primary"
-          >
-            {" "}
-            - Remove
-          </Button>
+            Add
+          </AddButton>
         </div>
-        <Button disabled={postState?.isSuccess} onClick={() => onSave()}>
-          {postState?.isSuccess ? (
-            <LoaderCircle className="animate-spin" />
-          ) : (
-            "Save"
-          )}
-        </Button>
+        <div className="mt-5">
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ArrowDropDownIcon />}
+              aria-controls="panel1-content"
+              id="panel1-header"
+            >
+              <Typography>In-Built Technical Skills</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              {inBuildSkills?.technicalSkills?.map((li, index) => (
+                <Chip
+                  key={index}
+                  disabled={skillsList?.technicalSkills?.includes(li)}
+                  onClick={() => handleAddDefaultSkill(li, "technicalSkills")}
+                  icon={<AddIcon />}
+                  sx={{
+                    mx: 1,
+                    backgroundColor: "rgb(159 91 255 / 60%)",
+                    color: "white",
+                  }}
+                  label={li}
+                />
+              ))}
+            </AccordionDetails>
+          </Accordion>
+        </div>
+        {skillsList?.technicalSkills?.length > 0 && (
+          <div className="mb-2 w-full border rounded-lg p-3 ">
+            {skillsList?.technicalSkills?.map((li, index) => (
+              <Chip
+                key={index}
+                label={li}
+                sx={{ m: 1 }}
+                color="default"
+                icon={
+                  <CloseIcon
+                    sx={{ fontSize: 20 }}
+                    color="error"
+                    onClick={() => handleRemoveSkill(index, "technicalSkills")}
+                  />
+                }
+              />
+            ))}
+          </div>
+        )}
       </div>
+
+      <div className="py-4">
+        <h2 className="font-bold text-sm">Soft Skills</h2>
+        <div className="flex gap-3">
+          <Input
+            className="w-50"
+            name="softSkills"
+            value={formState?.softSkills}
+            onChange={(e) => onChange(e)}
+          />
+          <AddButton
+            className="text-primary"
+            variant={"outline"}
+            icon={<Plus size={20} color="rgb(159 91 255)" />}
+            onClick={() => handleAddSkill("softSkills")}
+          >
+            Add
+          </AddButton>
+        </div>
+        <div className="mt-5">
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ArrowDropDownIcon />}
+              aria-controls="panel2-content"
+              id="panel2-header"
+            >
+              <Typography>In-Built Soft Skills</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              {inBuildSkills?.softSkills?.map((li, index) => (
+                <Chip
+                  key={index}
+                  disabled={skillsList?.softSkills.includes(li)}
+                  sx={{
+                    mx: 1,
+                    backgroundColor: "rgb(159 91 255 / 60%)",
+                    color: "white",
+                  }}
+                  onClick={() => handleAddDefaultSkill(li, "softSkills")}
+                  icon={<AddIcon />}
+                  label={li}
+                />
+              ))}
+            </AccordionDetails>
+          </Accordion>
+        </div>
+        {skillsList?.softSkills?.length > 0 && (
+          <div className="mb-2 w-full border rounded-lg p-3 ">
+            {skillsList?.softSkills?.map((li, index) => (
+              <Chip
+                key={index}
+                label={li}
+                sx={{ m: 1 }}
+                color="default"
+                icon={
+                  <CloseIcon
+                    sx={{ fontSize: 20 }}
+                    color="error"
+                    onClick={() => handleRemoveSkill(index, "softSkills")}
+                  />
+                }
+              />
+            ))}
+          </div>
+        )}
+      </div>
+      <Button
+        success={postState?.isSuccess}
+        loading={postState?.isLoading}
+        onClick={() => onSave()}
+      >
+        Save
+      </Button>
     </div>
   );
 }

@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
+import Button, { SubmitButton } from "./Button";
 const Form = ({
   children,
   id,
   onSubmit,
   actionState,
   actions,
+  isDiscard,
   onFormReset,
   ...rest
 }) => {
@@ -39,10 +41,23 @@ const Form = ({
       {actionState?.error && alert(actionState?.error)}
       {actions?.length > 0 && (
         <div style={{ display: "flex", gap: 10 }}>
-          {actions?.includes("submit") && <button>submit</button>}
-          {actions?.includes("close") && <button>close</button>}
-          {actions?.includes("clear") && <button>clear</button>}
-          {actions?.includes("back") && <button>back</button>}
+          {actions?.includes("submit") && (
+            <SubmitButton
+              loading={actionState?.isLoading}
+              success={actionState?.isSuccess}
+            >
+              Save
+            </SubmitButton>
+          )}
+          {actions?.includes("close") && (
+            <Button loading={actionState?.isLoading}>Close</Button>
+          )}
+          {actions?.includes("clear") && (
+            <Button loading={actionState?.isLoading}>Clear</Button>
+          )}
+          {actions?.includes("back") && (
+            <Button loading={actionState?.isLoading}>Back</Button>
+          )}
         </div>
       )}
     </form>
