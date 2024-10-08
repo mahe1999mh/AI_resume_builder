@@ -43,12 +43,21 @@ function Skills() {
     const { technicalSkills, softSkills } = skillsList;
     setResumeInfo((prev) => ({
       ...prev,
-      Skills: {
+      skills: {
         technicalSkills: [...technicalSkills],
         softSkills: [...softSkills],
       },
     }));
   }, [skillsList, setResumeInfo]);
+
+  useEffect(() => {
+    if (resumeInfo?.skills) {
+      setSkillsList({
+        technicalSkills: [...(resumeInfo?.skills?.technicalSkills || [])],
+        softSkills: [...(resumeInfo?.skills?.softSkills || [])],
+      });
+    }
+  }, [resumeInfo]);
 
   const handleAddSkill = (module) => {
     if (
@@ -109,6 +118,7 @@ function Skills() {
       }, 3000);
     }
   }, [postState]);
+
   return (
     <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4 mt-10">
       <h2 className="font-bold text-lg">Skills</h2>

@@ -3,7 +3,7 @@ import React from "react";
 function SkillsPreview({ resumeInfo }) {
   if (
     !resumeInfo ||
-    (!resumeInfo.Skills?.technicalSkills && !resumeInfo?.Skills?.softSkills)
+    (!resumeInfo.skills?.technicalSkills && !resumeInfo?.skills?.softSkills)
   )
     return null;
   if (!resumeInfo) return null;
@@ -11,8 +11,8 @@ function SkillsPreview({ resumeInfo }) {
     <div className="my-6">
       <h2 className="text-center font-bold text-sm mb-2">Skills</h2>
       <hr style={{ borderColor: resumeInfo?.themeColor }} />
-      {resumeInfo?.Skills?.technicalSkills &&
-        resumeInfo?.Skills?.technicalSkills.length > 0 && (
+      {resumeInfo?.skills?.technicalSkills &&
+        resumeInfo?.skills?.technicalSkills.length > 0 && (
           <>
             <h2
               className="font-bold text-xs mb-2 mt-1"
@@ -23,7 +23,7 @@ function SkillsPreview({ resumeInfo }) {
               Technical Skills
             </h2>
             <div className="grid grid-cols-6 gap-3 my-4">
-              {resumeInfo?.Skills?.technicalSkills?.map((skills, index) => (
+              {resumeInfo?.skills?.technicalSkills?.map((skills, index) => (
                 <div key={index} className="flex items-center ">
                   <ul>
                     <li className="text-xs">{skills}</li>
@@ -33,8 +33,8 @@ function SkillsPreview({ resumeInfo }) {
             </div>
           </>
         )}
-      {resumeInfo?.Skills?.softSkills &&
-        resumeInfo?.Skills?.softSkills?.length > 0 && (
+      {resumeInfo?.skills?.softSkills &&
+        resumeInfo?.skills?.softSkills?.length > 0 && (
           <>
             <h2
               className="font-bold text-xs mb-2 mt-1"
@@ -45,8 +45,8 @@ function SkillsPreview({ resumeInfo }) {
               Soft Skills
             </h2>
             <div className="grid grid-cols-6 gap-3 my-4">
-              {resumeInfo?.Skills?.softSkills &&
-                resumeInfo?.Skills?.softSkills?.map((skills, index) => (
+              {resumeInfo?.skills?.softSkills &&
+                resumeInfo?.skills?.softSkills?.map((skills, index) => (
                   <div key={index} className="flex items-center gap-2">
                     <ul>
                       <li className="text-xs">{skills}</li>
