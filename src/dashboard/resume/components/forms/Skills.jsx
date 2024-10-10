@@ -14,12 +14,9 @@ import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import { useUpdateResumeDetailMutation } from "@/redux/resume/resumeApi";
 import { useParams } from "react-router-dom";
 import useDebounce from "@/components/hooks/useDebounce";
+import { inBuildSkills } from "@/Enums";
 
 function Skills() {
-  const inBuildSkills = {
-    technicalSkills: ["ReactJS", "NodeJS", "HTML", "CSS"],
-    softSkills: ["Communication", "TeamWork", "Problem-Solving"],
-  };
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
   const [post, postState] = useUpdateResumeDetailMutation();
   const params = useParams();
@@ -135,12 +132,14 @@ function Skills() {
             onChange={e => onChange(e)}
           />
           <AddButton
-            className="text-primary"
+            className="hover:bg-primary hover:text-white transition-all duration-300"
             variant={"outline"}
-            icon={<Plus size={20} color="rgb(159 91 255)" />}
+            icon={
+              <Plus size={20} color="rgb(159 91 255)" aria-label="add skill" />
+            }
             onClick={() => handleAddSkill("technicalSkills")}
           >
-            Add
+            Technical Skills
           </AddButton>
         </div>
         <div className="mt-5">
@@ -160,7 +159,7 @@ function Skills() {
                   onClick={() => handleAddDefaultSkill(li, "technicalSkills")}
                   icon={<AddIcon />}
                   sx={{
-                    mx: 1,
+                    m: 1,
                     backgroundColor: "rgb(159 91 255 / 60%)",
                     color: "white",
                   }}
@@ -201,12 +200,12 @@ function Skills() {
             onChange={e => onChange(e)}
           />
           <AddButton
-            className="text-primary"
+            className="hover:bg-primary hover:text-white transition-all duration-300"
             variant={"outline"}
             icon={<Plus size={20} color="rgb(159 91 255)" />}
             onClick={() => handleAddSkill("softSkills")}
           >
-            Add
+            Soft Skills
           </AddButton>
         </div>
         <div className="mt-5">
@@ -224,7 +223,7 @@ function Skills() {
                   key={index}
                   disabled={skillsList?.softSkills.includes(li)}
                   sx={{
-                    mx: 1,
+                    m: 1,
                     backgroundColor: "rgb(159 91 255 / 60%)",
                     color: "white",
                   }}
