@@ -13,6 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import { useUpdateResumeDetailMutation } from "@/redux/resume/resumeApi";
 import { useParams } from "react-router-dom";
+import useDebounce from "@/components/hooks/useDebounce";
 
 function Skills() {
   const inBuildSkills = {
@@ -35,20 +36,20 @@ function Skills() {
     softSkills: "",
   });
 
-  const onChange = (e) => {
+  const onChange = e => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
 
-  useEffect(() => {
-    const { technicalSkills, softSkills } = skillsList;
-    setResumeInfo((prev) => ({
+  const debouncedSetResumeInfo = useDebounce(updatedSkills => {
+    setResumeInfo(prev => ({
       ...prev,
-      skills: {
-        technicalSkills: [...technicalSkills],
-        softSkills: [...softSkills],
-      },
+      skills: updatedSkills,
     }));
-  }, [skillsList, setResumeInfo]);
+  }, 100);
+
+  useEffect(() => {
+    debouncedSetResumeInfo(skillsList);
+  }, [skillsList, debouncedSetResumeInfo]);
 
   useEffect(() => {
     if (resumeInfo?.skills) {
@@ -59,17 +60,17 @@ function Skills() {
     }
   }, [resumeInfo]);
 
-  const handleAddSkill = (module) => {
+  const handleAddSkill = module => {
     if (
       skillsList?.[module]?.some(
-        (li) => li?.toLowerCase() === formState?.[module].toLowerCase()
+        li => li?.toLowerCase() === formState?.[module].toLowerCase()
       )
     ) {
       return alert("This skill is already added");
     }
 
     if (formState?.[module]) {
-      setSkillsList((prev) => ({
+      setSkillsList(prev => ({
         ...prev,
         [module]: [...prev[module], formState?.[module]],
       }));
@@ -82,20 +83,20 @@ function Skills() {
   const handleAddDefaultSkill = (value, module) => {
     if (
       skillsList?.[module]?.some(
-        (li) => li?.toLowerCase() === value.toLowerCase()
+        li => li?.toLowerCase() === value.toLowerCase()
       )
     ) {
       return alert("This skill is already added");
     }
     if (value) {
-      setSkillsList((prev) => ({
+      setSkillsList(prev => ({
         ...prev,
         [module]: [...prev[module], value],
       }));
     }
   };
   const handleRemoveSkill = (index, module) => {
-    setSkillsList((prev) => ({
+    setSkillsList(prev => ({
       ...prev,
       [module]: prev[module].filter((_, idx) => idx !== index),
     }));
@@ -131,7 +132,7 @@ function Skills() {
             className="w-50"
             name="technicalSkills"
             value={formState?.technicalSkills}
-            onChange={(e) => onChange(e)}
+            onChange={e => onChange(e)}
           />
           <AddButton
             className="text-primary"
@@ -197,7 +198,7 @@ function Skills() {
             className="w-50"
             name="softSkills"
             value={formState?.softSkills}
-            onChange={(e) => onChange(e)}
+            onChange={e => onChange(e)}
           />
           <AddButton
             className="text-primary"
