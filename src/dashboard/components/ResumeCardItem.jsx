@@ -19,25 +19,28 @@ import {
 } from "@/components/ui/alert-dialog";
 import GlobalApi from "./../../../service/GlobalApi";
 import { toast } from "sonner";
+import { useDeleteResumeByIdMutation } from "@/redux/resume/resumeApi";
 
 function ResumeCardItem({ resume, refreshData }) {
   const navigate = useNavigate();
   const [openAlert, setOpenAlert] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const onDelete = () => {
+  const [deleteResume] = useDeleteResumeByIdMutation();
+
+  const onDelete = async () => {
     setLoading(true);
-    GlobalApi.DeleteResumeById(resume?._id).then(
-      (resp) => {
-        toast("Resume Deleted!");
-        refreshData();
-        setLoading(false);
-        setOpenAlert(false);
-      },
-      (error) => {
-        setLoading(false);
-      }
-    );
+    try {
+      const response = await deleteResume(resume?._id).unwrap();
+      toast.success("Resume Deleted!", response);
+      refreshData();
+      setOpenAlert(false);
+    } catch (error) {
+      toast.error("Error deleting resume. Please try again.");
+      console.error("Delete resume error:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
