@@ -20,6 +20,7 @@ function Skills() {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
   const [post, postState] = useUpdateResumeDetailMutation();
   const params = useParams();
+  const [expand, setExpand] = useState(null);
 
   console.log(resumeInfo, "resumeInfotharu");
 
@@ -33,12 +34,12 @@ function Skills() {
     softSkills: "",
   });
 
-  const onChange = e => {
+  const onChange = (e) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
 
-  const debouncedSetResumeInfo = useDebounce(updatedSkills => {
-    setResumeInfo(prev => ({
+  const debouncedSetResumeInfo = useDebounce((updatedSkills) => {
+    setResumeInfo((prev) => ({
       ...prev,
       skills: updatedSkills,
     }));
@@ -57,17 +58,17 @@ function Skills() {
     }
   }, [resumeInfo]);
 
-  const handleAddSkill = module => {
+  const handleAddSkill = (module) => {
     if (
       skillsList?.[module]?.some(
-        li => li?.toLowerCase() === formState?.[module].toLowerCase()
+        (li) => li?.toLowerCase() === formState?.[module].toLowerCase()
       )
     ) {
       return alert("This skill is already added");
     }
 
     if (formState?.[module]) {
-      setSkillsList(prev => ({
+      setSkillsList((prev) => ({
         ...prev,
         [module]: [...prev[module], formState?.[module]],
       }));
@@ -80,20 +81,20 @@ function Skills() {
   const handleAddDefaultSkill = (value, module) => {
     if (
       skillsList?.[module]?.some(
-        li => li?.toLowerCase() === value.toLowerCase()
+        (li) => li?.toLowerCase() === value.toLowerCase()
       )
     ) {
       return alert("This skill is already added");
     }
     if (value) {
-      setSkillsList(prev => ({
+      setSkillsList((prev) => ({
         ...prev,
         [module]: [...prev[module], value],
       }));
     }
   };
   const handleRemoveSkill = (index, module) => {
-    setSkillsList(prev => ({
+    setSkillsList((prev) => ({
       ...prev,
       [module]: prev[module].filter((_, idx) => idx !== index),
     }));
@@ -117,6 +118,10 @@ function Skills() {
     }
   }, [postState]);
 
+  const handleAccordionChange = (panel) => (event, isExpanded) => {
+    setExpand(isExpanded ? panel : null);
+  };
+
   return (
     <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4 mt-10">
       <h2 className="font-bold text-lg">Skills</h2>
@@ -129,7 +134,7 @@ function Skills() {
             className="w-50"
             name="technicalSkills"
             value={formState?.technicalSkills}
-            onChange={e => onChange(e)}
+            onChange={(e) => onChange(e)}
           />
           <AddButton
             className="hover:bg-primary hover:text-white transition-all duration-300"
@@ -143,7 +148,10 @@ function Skills() {
           </AddButton>
         </div>
         <div className="mt-5">
-          <Accordion>
+          <Accordion
+            expanded={expand == "technicalSkills"}
+            onChange={handleAccordionChange("technicalSkills")}
+          >
             <AccordionSummary
               expandIcon={<ArrowDropDownIcon />}
               aria-controls="panel1-content"
@@ -197,7 +205,7 @@ function Skills() {
             className="w-50"
             name="softSkills"
             value={formState?.softSkills}
-            onChange={e => onChange(e)}
+            onChange={(e) => onChange(e)}
           />
           <AddButton
             className="hover:bg-primary hover:text-white transition-all duration-300"
@@ -209,7 +217,10 @@ function Skills() {
           </AddButton>
         </div>
         <div className="mt-5">
-          <Accordion>
+          <Accordion
+            expanded={expand == "softSkills"}
+            onChange={handleAccordionChange("softSkills")}
+          >
             <AccordionSummary
               expandIcon={<ArrowDropDownIcon />}
               aria-controls="panel2-content"
@@ -255,13 +266,15 @@ function Skills() {
           </div>
         )}
       </div>
-      <Button
-        success={postState?.isSuccess}
-        loading={postState?.isLoading}
-        onClick={() => onSave()}
-      >
-        Save
-      </Button>
+      <div style={{ display: "flex", justifyContent: "end" }}>
+        <Button
+          success={postState?.isSuccess}
+          loading={postState?.isLoading}
+          onClick={() => onSave()}
+        >
+          Save
+        </Button>
+      </div>
     </div>
   );
 }

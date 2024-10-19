@@ -38,7 +38,11 @@ const Button = ({
     >
       <span
         className="btn-text"
-        style={{ display: "flex", alignItems: "center" }}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
       >
         {loading ? (
           <LoaderCircle className="animate-spin" />

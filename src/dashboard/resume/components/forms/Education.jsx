@@ -29,7 +29,7 @@ function Education() {
   const handleChange = (event, index) => {
     const { name, value } = event.target;
 
-    setEducationalList(prev => {
+    setEducationalList((prev) => {
       return prev?.map((list, i) =>
         index == i ? { ...list, [name]: value } : list
       );
@@ -50,7 +50,7 @@ function Education() {
     ]);
   };
   const RemoveEducation = () => {
-    setEducationalList(educationalList => educationalList.slice(0, -1));
+    setEducationalList((educationalList) => educationalList.slice(0, -1));
   };
   const onSave = () => {
     const data = {
@@ -78,15 +78,15 @@ function Education() {
                 <label>University Name</label>
                 <Input
                   name="universityName"
-                  onChange={e => handleChange(e, index)}
+                  onChange={(e) => handleChange(e, index)}
                   defaultValue={item?.universityName ?? ""}
                 />
               </div>
               <div>
-                <label>Degree</label>
+                <label>Qualification</label>
                 <Input
                   name="degree"
-                  onChange={e => handleChange(e, index)}
+                  onChange={(e) => handleChange(e, index)}
                   defaultValue={item?.degree ?? ""}
                 />
               </div>
@@ -94,7 +94,7 @@ function Education() {
                 <label>Major</label>
                 <Input
                   name="major"
-                  onChange={e => handleChange(e, index)}
+                  onChange={(e) => handleChange(e, index)}
                   defaultValue={item?.major}
                 />
               </div>
@@ -103,7 +103,7 @@ function Education() {
                 <Input
                   type="date"
                   name="startDate"
-                  onChange={e => handleChange(e, index)}
+                  onChange={(e) => handleChange(e, index)}
                   defaultValue={item?.startDate}
                 />
               </div>
@@ -112,7 +112,7 @@ function Education() {
                 <Input
                   type="date"
                   name="endDate"
-                  onChange={e => handleChange(e, index)}
+                  onChange={(e) => handleChange(e, index)}
                   defaultValue={item?.endDate}
                 />
               </div>
@@ -120,7 +120,7 @@ function Education() {
                 <label>Description</label>
                 <Textarea
                   name="description"
-                  onChange={e => handleChange(e, index)}
+                  onChange={(e) => handleChange(e, index)}
                   defaultValue={item?.description}
                 />
               </div>

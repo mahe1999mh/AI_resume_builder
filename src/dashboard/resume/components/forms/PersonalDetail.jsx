@@ -30,7 +30,7 @@ function PersonalDetail() {
   useEffect(() => {
     if (resumeInfo) {
       // Set form data with resumeInfo if available
-      setFormData(prevData => ({
+      setFormData((prevData) => ({
         ...prevData,
         personal: {
           ...resumeInfo?.personal,
@@ -43,9 +43,9 @@ function PersonalDetail() {
     }
   }, [resumeInfo]);
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevFormData => ({
+    setFormData((prevFormData) => ({
       ...prevFormData,
       personal: {
         ...prevFormData.personal,
@@ -53,7 +53,7 @@ function PersonalDetail() {
       },
     }));
 
-    setResumeInfo(prevResumeInfo => ({
+    setResumeInfo((prevResumeInfo) => ({
       ...prevResumeInfo,
       personal: {
         ...prevResumeInfo?.personal,
@@ -62,7 +62,7 @@ function PersonalDetail() {
     }));
   };
 
-  const onSave = e => {
+  const onSave = (e) => {
     e.preventDefault();
     const data = { personal: formData.personal };
     post({ id: params.resumeId, data });
@@ -88,7 +88,6 @@ function PersonalDetail() {
             <label className="text-sm">Last Name</label>
             <Input
               name="lastName"
-              required
               onChange={handleInputChange}
               defaultValue={resumeInfo?.personal?.lastName || ""}
             />

@@ -9,7 +9,6 @@ import Education from "./forms/Education";
 import Skills from "./forms/Skills";
 import ThemeColor from "./ThemeColor";
 import Projects from "./forms/Project";
-import StyleSettings from "./StyleSettings";
 
 const FormSection = () => {
   const [activeFormIndex, setActiveFormIndex] = useState(1);
@@ -19,7 +18,7 @@ const FormSection = () => {
       <div className="flex justify-between items-center">
         <div className="flex justify-between gap-10">
           <ThemeColor />
-          <StyleSettings />
+          {/* <StyleSettings /> */}
         </div>
 
         <div className="flex gap-2">

@@ -29,10 +29,12 @@ function ExperiencePreview({ resumeInfo }) {
             {experience?.title}
           </h2>
           <h2 className="text-sx flex justify-between">
-            {`${experience?.companyName}, ${experience?.city}, ${experience?.state}`}
+            {experience?.companyName &&
+              `${experience?.companyName}, ${experience?.city}, ${experience?.state}`}
 
             <span className="text-xs font-normal">
-              {experience?.startDate.slice(0, 7)} To{" "}
+              {experience?.startDate.slice(0, 7)}
+              {experience?.startDate && "To"}
               {experience?.currentlyWorking
                 ? "Present"
                 : experience?.endDate.slice(0, 7)}

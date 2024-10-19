@@ -44,7 +44,7 @@ function ProjectPreview({ resumeInfo }) {
           >
             {project?.title}
             <span className="text-xs font-normal">
-              {project?.startDate.slice(0, 7)} To{" "}
+              {project?.startDate.slice(0, 7)} {project?.startDate && "To"}{" "}
               {project?.currentlyWorking
                 ? "Present"
                 : project?.endDate.slice(0, 7)}{" "}
