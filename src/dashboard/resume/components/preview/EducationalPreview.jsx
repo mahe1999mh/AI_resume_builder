@@ -31,11 +31,16 @@ function EducationalPreview({ resumeInfo }) {
           <h2 className="text-xs flex justify-between">
             {education?.degree} {education?.major && "-"} {education?.major}
             <span>
-              {education?.startDate.slice(0, 7)} {education?.startDate && "-"}
+              {education?.startDate.slice(0, 7)} {education?.startDate && "To "}
               {education?.endDate.slice(0, 7)}
             </span>
           </h2>
-          <p className="text-xs my-2">{education?.description}</p>
+          {/* <p className="text-xs my-2">{education?.description}</p> */}
+          <h2 className="text-xs my-2">
+            {education?.cgpa && "CGPA: "}
+            <span>{education?.cgpa}</span>
+          </h2>
+
         </div>
       ))}
     </div>

@@ -1,7 +1,9 @@
 import React from "react";
 
 function ExperiencePreview({ resumeInfo }) {
-  if (!resumeInfo || resumeInfo.expirence === "fresher") return null;
+  console.log((resumeInfo));
+
+  if (!resumeInfo || !resumeInfo?.personal?.isExperience) return null;
   return (
     <div className="my-6">
       <h2
@@ -34,7 +36,7 @@ function ExperiencePreview({ resumeInfo }) {
 
             <span className="text-xs font-normal">
               {experience?.startDate.slice(0, 7)}
-              {experience?.startDate && "To"}
+              {experience?.startDate && " To "}
               {experience?.currentlyWorking
                 ? "Present"
                 : experience?.endDate.slice(0, 7)}
