@@ -27,6 +27,10 @@ const route = createBrowserRouter([
         path: "/dashboard/resume/:resumeId/edit",
         element: <EditResume />,
       },
+      {
+        path: "/dashboard/WordCloud",
+        element: <ViewResume />,
+      },
     ],
   },
   {
@@ -39,6 +43,10 @@ const route = createBrowserRouter([
   },
   {
     path: "/my-resume/:resumeId/view",
+    element: <ViewResume />,
+  },
+  {
+    path: "/my-resume/WordCloud",
     element: <ViewResume />,
   },
 ]);
