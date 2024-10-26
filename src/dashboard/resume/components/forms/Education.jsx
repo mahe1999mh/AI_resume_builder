@@ -20,6 +20,7 @@ function Education() {
       startDate: "",
       endDate: "",
       description: "",
+      cgpa: "",
     },
   ]);
 
@@ -46,6 +47,7 @@ function Education() {
         startDate: "",
         endDate: "",
         description: "",
+        cgpa: ""
       },
     ]);
   };
@@ -75,7 +77,7 @@ function Education() {
           <div>
             <div className="grid grid-cols-2 gap-3 border p-3 my-5 rounded-lg">
               <div className="col-span-2">
-                <label>University Name</label>
+                <label>College Name</label>
                 <Input
                   name="universityName"
                   onChange={(e) => handleChange(e, index)}
@@ -116,12 +118,20 @@ function Education() {
                   defaultValue={item?.endDate}
                 />
               </div>
-              <div className="col-span-2">
+              {/* <div className="col-span-2">
                 <label>Description</label>
                 <Textarea
                   name="description"
                   onChange={(e) => handleChange(e, index)}
                   defaultValue={item?.description}
+                />
+              </div> */}
+              <div>
+                <label>CGPA</label>
+                <Input
+                  name="cgpa"
+                  onChange={(e) => handleChange(e, index)}
+                  defaultValue={item?.cgpa}
                 />
               </div>
             </div>
