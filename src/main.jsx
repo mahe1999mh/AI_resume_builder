@@ -10,8 +10,8 @@ import { ClerkProvider } from "@clerk/clerk-react";
 import EditResume from "./dashboard/resume/[resumeId]/edit/index.jsx";
 import ViewResume from "./my-resume/[resumeId]/view/index.jsx";
 
-import { Provider } from "react-redux"; // Import Provider
-import { store } from "./redux/store"; // Import the store
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 

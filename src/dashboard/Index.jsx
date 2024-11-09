@@ -3,7 +3,6 @@ import AddResume from "./components/addResume";
 import ResumeCardItem from "./components/ResumeCardItem";
 import { useUser } from "@clerk/clerk-react";
 import { useGetUserResumesQuery } from "@/redux/resume/resumeApi";
-import dummy from "@/data/dummy";
 
 const Dashboard = () => {
   const { user } = useUser();
