@@ -96,7 +96,6 @@ function PersonalDetail() {
             <label className="text-sm">Job Title</label>
             <Input
               name="jobTitle"
-              required
               defaultValue={resumeInfo?.personal?.jobTitle || ""}
               onChange={handleInputChange}
             />
@@ -164,7 +163,6 @@ function PersonalDetail() {
             <label className="text-sm">LinkedIn Profile</label>
             <Input
               name="linkedin"
-              required
               defaultValue={resumeInfo?.personal?.linkedin || ""}
               onChange={handleInputChange}
             />
@@ -173,7 +171,6 @@ function PersonalDetail() {
             <label className="text-sm">GitHub Profile</label>
             <Input
               name="github"
-              required
               defaultValue={resumeInfo?.personal?.github || ""}
               onChange={handleInputChange}
             />
