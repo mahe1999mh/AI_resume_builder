@@ -34,12 +34,12 @@ function Skills() {
     softSkills: "",
   });
 
-  const onChange = e => {
+  const onChange = (e) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
 
-  const debouncedSetResumeInfo = useDebounce(updatedSkills => {
-    setResumeInfo(prev => ({
+  const debouncedSetResumeInfo = useDebounce((updatedSkills) => {
+    setResumeInfo((prev) => ({
       ...prev,
       skills: updatedSkills,
     }));
@@ -52,12 +52,17 @@ function Skills() {
   useEffect(() => {
     // Only call debouncedSetResumeInfo when there's a meaningful change in skillsList
     if (
-      JSON.stringify(skillsList.technicalSkills) !==
-        JSON.stringify(resumeInfo?.skills?.technicalSkills) ||
-      JSON.stringify(skillsList.softSkills) !==
-        JSON.stringify(resumeInfo?.skills?.softSkills)
+      skillsList?.technicalSkills?.length > 0 &&
+      skillsList?.softSkills?.length > 0
     ) {
-      debouncedSetResumeInfo(skillsList);
+      if (
+        JSON.stringify(skillsList.technicalSkills) !==
+          JSON.stringify(resumeInfo?.skills?.technicalSkills) ||
+        JSON.stringify(skillsList.softSkills) !==
+          JSON.stringify(resumeInfo?.skills?.softSkills)
+      ) {
+        debouncedSetResumeInfo(skillsList);
+      }
     }
   }, [skillsList]);
 
@@ -70,17 +75,17 @@ function Skills() {
     }
   }, [resumeInfo]);
 
-  const handleAddSkill = module => {
+  const handleAddSkill = (module) => {
     if (
       skillsList?.[module]?.some(
-        li => li?.toLowerCase() === formState?.[module].toLowerCase()
+        (li) => li?.toLowerCase() === formState?.[module].toLowerCase()
       )
     ) {
       return alert("This skill is already added");
     }
 
     if (formState?.[module]) {
-      setSkillsList(prev => ({
+      setSkillsList((prev) => ({
         ...prev,
         [module]: [...prev[module], formState?.[module]],
       }));
@@ -94,20 +99,20 @@ function Skills() {
   const handleAddDefaultSkill = (value, module) => {
     if (
       skillsList?.[module]?.some(
-        li => li?.toLowerCase() === value.toLowerCase()
+        (li) => li?.toLowerCase() === value.toLowerCase()
       )
     ) {
       return alert("This skill is already added");
     }
     if (value) {
-      setSkillsList(prev => ({
+      setSkillsList((prev) => ({
         ...prev,
         [module]: [...prev[module], value],
       }));
     }
   };
   const handleRemoveSkill = (index, module) => {
-    setSkillsList(prev => ({
+    setSkillsList((prev) => ({
       ...prev,
       [module]: prev[module].filter((_, idx) => idx !== index),
     }));
@@ -131,7 +136,7 @@ function Skills() {
     }
   }, [postState]);
 
-  const handleAccordionChange = panel => (event, isExpanded) => {
+  const handleAccordionChange = (panel) => (event, isExpanded) => {
     setExpand(isExpanded ? panel : null);
   };
 
@@ -147,7 +152,7 @@ function Skills() {
             className="w-50"
             name="technicalSkills"
             value={formState?.technicalSkills}
-            onChange={e => onChange(e)}
+            onChange={(e) => onChange(e)}
           />
           <AddButton
             className="hover:bg-primary hover:text-white transition-all duration-300"
@@ -218,7 +223,7 @@ function Skills() {
             className="w-50"
             name="softSkills"
             value={formState?.softSkills}
-            onChange={e => onChange(e)}
+            onChange={(e) => onChange(e)}
           />
           <AddButton
             className="hover:bg-primary hover:text-white transition-all duration-300"

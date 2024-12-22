@@ -29,13 +29,11 @@ function SkillsPreview({ resumeInfo }) {
             >
               Technical Skills
             </h2>
-            <div className="grid grid-cols-6 gap-3 my-4">
+            <div className="flex flex-wrap gap-2 my-4">
               {resumeInfo?.skills?.technicalSkills?.map((skills, index) => (
-                <div key={index} className="flex items-center ">
-                  <ul>
-                    <li className="text-xs">{skills}</li>
-                  </ul>
-                </div>
+                <span key={index} className="text-xs px-2 py-1 ">
+                  {skills}
+                </span>
               ))}
             </div>
           </>
@@ -51,15 +49,12 @@ function SkillsPreview({ resumeInfo }) {
             >
               Soft Skills
             </h2>
-            <div className="grid grid-cols-6 gap-3 my-4">
-              {resumeInfo?.skills?.softSkills &&
-                resumeInfo?.skills?.softSkills?.map((skills, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <ul>
-                      <li className="text-xs">{skills}</li>
-                    </ul>
-                  </div>
-                ))}
+            <div className="flex flex-wrap gap-2 my-4">
+              {resumeInfo?.skills?.softSkills?.map((skills, index) => (
+                <span key={index} className="text-xs px-2 py-1 ">
+                  {skills}
+                </span>
+              ))}
             </div>
           </>
         )}

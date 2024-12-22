@@ -1,9 +1,9 @@
 import React from "react";
 
 function ExperiencePreview({ resumeInfo }) {
-  console.log((resumeInfo));
+  console.log(resumeInfo, "tharu-mmm");
 
-  if (!resumeInfo || !resumeInfo?.personal?.isExperience) return null;
+  if (!resumeInfo || !resumeInfo?.experience) return null;
   return (
     <div className="my-6">
       <h2

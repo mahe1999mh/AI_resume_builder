@@ -24,9 +24,10 @@ function PersonalDetailPreview({ resumeInfo }) {
         {resumeInfo?.address}
       </h2>
 
-      <div className="flex justify-center gap-4">
+      {/* Flex container */}
+      <div className="flex flex-wrap justify-center gap-4">
         <h2
-          className="font-normal text-xs"
+          className="font-normal text-xs break-words"
           style={{
             color: resumeInfo?.themeColor,
           }}
@@ -34,7 +35,7 @@ function PersonalDetailPreview({ resumeInfo }) {
           {resumeInfo?.phone}
         </h2>
         <h2
-          className="font-normal text-xs"
+          className="font-normal text-xs break-words"
           style={{
             color: resumeInfo?.themeColor,
           }}
@@ -42,7 +43,7 @@ function PersonalDetailPreview({ resumeInfo }) {
           {resumeInfo?.email}
         </h2>
         <h2
-          className="font-normal text-xs"
+          className="font-normal text-xs break-words"
           style={{
             color: resumeInfo?.themeColor,
           }}
@@ -50,7 +51,7 @@ function PersonalDetailPreview({ resumeInfo }) {
           {resumeInfo?.linkedin}
         </h2>
         <h2
-          className="font-normal text-xs"
+          className="font-normal text-xs break-words"
           style={{
             color: resumeInfo?.themeColor,
           }}

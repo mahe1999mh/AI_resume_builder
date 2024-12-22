@@ -33,6 +33,8 @@ const ResumePreview = () => {
         id="content"
         style={{
           borderColor: resumeInfo?.themeColor,
+          maxWidth: "800px",
+          margin: "0 auto",
         }}
       >
         {/* PersonalDetailPreview */}
