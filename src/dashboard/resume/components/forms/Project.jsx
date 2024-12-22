@@ -16,7 +16,7 @@ const Projects = () => {
 
   // Add a new project entry to the list
   const addNewProject = () => {
-    setProjectList(prev => [
+    setProjectList((prev) => [
       ...prev,
       { title: "", startDate: "", endDate: "", summary: "" },
     ]);
@@ -24,7 +24,7 @@ const Projects = () => {
 
   // Remove the last project entry from the list, preventing deletion of the last project
   const removeProject = () => {
-    setProjectList(prevList =>
+    setProjectList((prevList) =>
       prevList.length > 1 ? prevList.slice(0, -1) : prevList
     );
   };
@@ -32,14 +32,14 @@ const Projects = () => {
   // Handle input changes for project fields
   const handleChange = (e, index) => {
     const { name, value } = e.target;
-    setProjectList(prev =>
+    setProjectList((prev) =>
       prev.map((item, i) => (i === index ? { ...item, [name]: value } : item))
     );
   };
 
   // Handle changes in the rich text editor
   const handleEditorChange = useDebounce((value, index) => {
-    setProjectList(prev =>
+    setProjectList((prev) =>
       prev.map((item, i) => (i === index ? { ...item, summary: value } : item))
     );
   }, 10);
@@ -47,7 +47,7 @@ const Projects = () => {
   // Save project list to the server
   const onSave = async () => {
     const hasErrors = projectList.some(
-      project => !project.title || !project.startDate
+      (project) => !project.title || !project.startDate
     );
 
     if (hasErrors) {
@@ -58,7 +58,7 @@ const Projects = () => {
     try {
       const data = { projects: [...projectList] };
       await post({ id: params.resumeId, data }).unwrap();
-      alert("Projects saved successfully!");
+      // alert("Projects saved successfully!");
     } catch (error) {
       alert("Error saving projects. Please try again.");
     }
@@ -73,7 +73,7 @@ const Projects = () => {
 
   // Update resumeInfo only when projectList changes
   useEffect(() => {
-    setResumeInfo(prev => ({
+    setResumeInfo((prev) => ({
       ...prev,
       projects: projectList,
     }));
@@ -94,7 +94,7 @@ const Projects = () => {
             <Input
               name="title"
               value={item.title || ""}
-              onChange={e => handleChange(e, index)}
+              onChange={(e) => handleChange(e, index)}
             />
           </div>
           <div>
@@ -103,7 +103,7 @@ const Projects = () => {
               type="date"
               name="startDate"
               value={item.startDate || ""}
-              onChange={e => handleChange(e, index)}
+              onChange={(e) => handleChange(e, index)}
             />
           </div>
           <div>
@@ -112,13 +112,13 @@ const Projects = () => {
               type="date"
               name="endDate"
               value={item.endDate || ""}
-              onChange={e => handleChange(e, index)}
+              onChange={(e) => handleChange(e, index)}
             />
           </div>
           <div className="col-span-2">
             <label>Description</label>
             <TextEditor
-              onTextEditorChange={value => handleEditorChange(value, index)}
+              onTextEditorChange={(value) => handleEditorChange(value, index)}
               defaultValue={item.summary || ""}
             />
           </div>
