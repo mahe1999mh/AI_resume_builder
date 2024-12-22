@@ -4,6 +4,7 @@ import ResumePreview from "../../components/ResumePreview";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import { useParams } from "react-router-dom";
 import { useGetResumeByIdQuery } from "@/redux/resume/resumeApi";
+import { TemplateSelector } from "./TemplateSelector";
 
 const EditResume = () => {
   const [resumeInfo, setResumeInfo] = useState();
@@ -23,7 +24,12 @@ const EditResume = () => {
         {/* FormSection */}
         <FormSection />
         {/* ResumePreview */}
-        <ResumePreview />
+        <div>
+          {/* <div style={{ display: "flex", gap: "5px", paddingBottom: "5px" }}>
+            <TemplateSelector />
+          </div> */}
+          <ResumePreview />
+        </div>
       </div>
     </ResumeInfoContext.Provider>
   );

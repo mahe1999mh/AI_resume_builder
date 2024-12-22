@@ -2,12 +2,13 @@ import React from "react";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
 import { UserButton, useUser } from "@clerk/clerk-react";
+import ResumeLogo from "./../../assets/logo.png";
 const Header = () => {
   const { user, isSignedIn } = useUser();
 
   return (
     <div className="p-3 px-5 flex justify-between shadow-md">
-      <img src={"./logo.png"} width={100} height={100} />
+      <img src={ResumeLogo} width={150} height={150} />
       {isSignedIn ? (
         <div className="flex gap-2 items-center">
           <Link to={"/dashboard"}>
