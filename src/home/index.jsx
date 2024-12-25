@@ -21,9 +21,9 @@ function Home() {
         {/* <Header/> */}
 
         <Hero onGetStarted={handleGetStarted} />
+        <Pricing />
         <Features />
         <Testimonials />
-        <Pricing />
       </div>
     </div>
   );
