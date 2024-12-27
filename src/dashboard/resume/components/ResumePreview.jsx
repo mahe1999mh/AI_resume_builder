@@ -44,8 +44,7 @@ const ResumePreview = () => {
         {/* Project   */}
         <ProjectPreview resumeInfo={resumeInfo} />
         {/* Professional Experience  */}
-        <ExperiencePreview resumeInfo={resumeInfo} />
-
+        {resumeInfo?.personal?.isExperience && <ExperiencePreview resumeInfo={resumeInfo} />}
         {/* Educational  */}
         <EducationalPreview resumeInfo={resumeInfo} />
         {/* Skills  */}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import PersonalDetail from "./forms/PersonalDetail";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, LayoutGrid } from "lucide-react";
@@ -9,10 +9,14 @@ import Education from "./forms/Education";
 import Skills from "./forms/Skills";
 import ThemeColor from "./ThemeColor";
 import Projects from "./forms/Project";
+import { ResumeInfoContext } from "@/context/ResumeInfoContext";
+
 
 const FormSection = () => {
   const [activeFormIndex, setActiveFormIndex] = useState(1);
   const { resumeId } = useParams();
+  const { resumeInfo } = useContext(ResumeInfoContext);
+
   return (
     <div className="p-1">
       <div className="flex justify-between items-center">
@@ -23,22 +27,39 @@ const FormSection = () => {
 
         <div className="flex gap-2">
           {activeFormIndex > 1 && (
-            <Button
-              onClick={() => setActiveFormIndex(activeFormIndex - 1)}
-              size="sm"
-            >
-              <ArrowLeft />
-            </Button>
+            !resumeInfo?.personal?.isExperience && activeFormIndex == 5 ?
+              <Button
+                onClick={() => setActiveFormIndex(activeFormIndex - 2)}
+                size="sm"
+              >
+                <ArrowLeft />
+              </Button> :
+              <Button
+                onClick={() => setActiveFormIndex(activeFormIndex - 1)}
+                size="sm"
+              >
+                <ArrowLeft />
+              </Button>
           )}
-          <Button
-            size="sm"
-            disabled={activeFormIndex >= 7}
-            className="flex gap-2"
-            onClick={() => setActiveFormIndex(activeFormIndex + 1)}
-          >
-            Next
-            <ArrowRight />
-          </Button>
+          {!resumeInfo?.personal?.isExperience && activeFormIndex == 3 ?
+            <Button
+              size="sm"
+              disabled={activeFormIndex >= 7}
+              className="flex gap-2"
+              onClick={() => setActiveFormIndex(activeFormIndex + 2)}
+            >
+              Next
+              <ArrowRight />
+            </Button>
+            : <Button
+              size="sm"
+              disabled={activeFormIndex >= 7}
+              className="flex gap-2"
+              onClick={() => setActiveFormIndex(activeFormIndex + 1)}
+            >
+              Next
+              <ArrowRight />
+            </Button>}
         </div>
       </div>
       {activeFormIndex == 1 && <PersonalDetail />}
