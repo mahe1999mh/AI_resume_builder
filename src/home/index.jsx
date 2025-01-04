@@ -23,6 +23,19 @@ function Home() {
       <div>
         {/* <Header /> */}
         <div>
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_j6zKHu8BEYzvw9sK3O5kVj2jE5xA0NNdYw&s"
+            alt="Professional workspace"
+            style={{
+              borderRadius: "50%",
+              width: "60px",
+              height: "60px",
+              position: "fixed",
+              bottom: "10px",
+              right: "10px",
+              zIndex: 100,
+            }}
+          />
           {/* <img src={'/grid.svg'} className="absolute z-[-10] w-full" 
       width={1200} height={300} /> */}
           {/* <Header/> */}

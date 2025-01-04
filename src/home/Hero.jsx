@@ -22,7 +22,7 @@ export function Hero({ onGetStarted }) {
               our AI-powered platform. Stand out in the competitive job market.
             </p>
             <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
-              {benefits.map(benefit => (
+              {benefits.map((benefit) => (
                 <div key={benefit} className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
                   <span className="text-base sm:text-lg">{benefit}</span>
